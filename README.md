@@ -1,12 +1,13 @@
-Approved. Proceed with step 2:
-- Make the content-word helper the default for Q-COMPLETE-04 and the audit check; remove the CHANGELENS_CONTENT_WORDS flag and any flag-off code path.
-- Bump the rule pack's minor version and update the rule's description if it says how words are counted (e.g. "ticket keys, record numbers and single characters don't count as words").
-- CHANGELOG and decisions.md: the fix, the word definition, and the measured impact (6,461 past changes: 0 mismatches, 4 findings removed, 7 added, 1 status change Needs work → Blocked). No change numbers in any file.
-- Rerun the full suite and `python scripts/check.py --browser --audit`; expect 0 mismatches. Report counts.
-- Delete work/tmp/words/ when done.
+Remove "Viewed" from Pending completely. Same standing rules; no git operations unless I ask.
+- Remove the "✓ Viewed" text and its "·" separator from the CRQ line, the phone cards, and the calendar bars (✓ mark and "Viewed" in tooltips).
+- Remove the Viewed tracking itself: its sessionStorage key, the code that records opens, and any reads of it. Keep the separate decisions store unchanged.
+- Keep the last-closed row highlight (background and left navy bar).
+- The CRQ line becomes: CRQ number, copy icon on hover, then the decision pill only when a decision exists (no leading separator).
+- Remove or update every related test; update SECURITY.md (remove Viewed from what's kept in the tab), the user guide, decisions.md (Viewed removed: decisions and the row highlight cover it) and CHANGELOG (no new version).
+- Run the browser tests and `python scripts/check.py --browser --audit`; report counts.
 No branches, tags or commits.
 
 git status
 git add -A
-git commit -m "Q-COMPLETE-04: count content words correctly (hyphenated words count; ticket keys, record numbers and lone characters don't). Audit mismatches 7 -> 0."
+git commit -m "Pending: remove Viewed marks; decisions and the last-closed highlight cover it"
 git push
