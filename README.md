@@ -1,18 +1,10 @@
-Accuracy fix for the summary word-count rule (the rule behind the 7 audit mismatches; confirm its code). Two steps; stop after step 1.
+Use the narrower ID definition and re-measure (still step 1; don't proceed to step 2).
 
-Standing rules: no git operations unless I ask; never read, search or print cr_core/config.py or cr_core/history/config.py; never read .env; GET requests only to Remedy; codes and counts only in replies (no change numbers or text).
+Content words: split as now (spaces, - / _ :, plus | , ;). Do NOT count only:
+- ticket keys: letters, a hyphen, then 3 or more digits (e.g. ABC-1234) — check the key before splitting on hyphens
+- CRQ/INC (and other Remedy) record numbers
+- pure numbers, version strings (3.2.1, v2), dates and ratios (9/9, 2026-11-07)
+- bracketed tags and single characters
+Letters-then-digits names such as Db2, EC2, Java17, A9 DO count as words.
 
-Definition of a content word (use one shared helper in both the rule and the audit's independent check):
-- split on whitespace and on - / _ :
-- strip surrounding punctuation and brackets; drop bracketed tags such as [Synthetic]
-- do not count: pure numbers, version strings (e.g. 3.2.1, v2), ticket or ID tokens (letters followed by digits, e.g. CRQ123, ABC-1234 after splitting), single characters
-- the threshold stays the same as now
-
-Step 1 (measure only, no rule change committed):
-- implement the helper behind a flag, run the full accuracy audit with and without it, and report: mismatches before and after; how many past changes gain or lose this finding; score changes (count, and min/max delta); status changes (count by from→to); confirm #1, #2, #3 and #7 still get the finding and #4, #5 and #6 no longer do.
-- add unit tests for the helper: hyphenated words, slashes, underscores, colons, IDs, versions, numbers, bracketed tags, mixed cases like the 7 shapes.
-- stop and report. Don't change the rule pack version or docs yet.
-
-Step 2 (only after I approve): make it the default, remove the flag, bump the rule pack's minor version, note the change and its measured impact in CHANGELOG and decisions.md, update the rule's description if it mentions how words are counted, and rerun the full suite and audit (expect 0 mismatches).
-
-No branches, tags or commits.
+Re-run the full audit with the flag on and report the same table as before: Q-COMPLETE-04 findings, mismatches, gains and losses, score changes (count and min/max), status changes (from→to), and whether each of the 7 cases has the finding. For any remaining new findings, give their shapes only (no text) and whether each looks genuinely too short. Update the unit tests (Db2, EC2, Java17 count; ABC-1234, CRQ numbers, versions, dates don't). No branches, tags or commits.
