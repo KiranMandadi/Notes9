@@ -1,10 +1,9 @@
-Use the narrower ID definition and re-measure (still step 1; don't proceed to step 2).
+Re-measure once more with these adjustments (still step 1; don't proceed to step 2):
 
-Content words: split as now (spaces, - / _ :, plus | , ;). Do NOT count only:
-- ticket keys: letters, a hyphen, then 3 or more digits (e.g. ABC-1234) — check the key before splitting on hyphens
-- CRQ/INC (and other Remedy) record numbers
-- pure numbers, version strings (3.2.1, v2), dates and ratios (9/9, 2026-11-07)
-- bracketed tags and single characters
-Letters-then-digits names such as Db2, EC2, Java17, A9 DO count as words.
+1. Numbers, versions, dates and ratios COUNT as words again (as the current rule does). Do not drop them.
+2. Words inside bracketed tags COUNT (remove only the brackets).
+3. Still drop: ticket keys (letters, hyphen, 3+ digits), Remedy record numbers (CRQ/INC etc. with 5+ digits), single characters and standalone punctuation (e.g. a lone "-").
+4. Splitting unchanged: spaces, - / _ : and | , ;. Letters-then-digits names (Db2, EC2, Java17) count.
+5. #7 losing the finding is accepted.
 
-Re-run the full audit with the flag on and report the same table as before: Q-COMPLETE-04 findings, mismatches, gains and losses, score changes (count and min/max), status changes (from→to), and whether each of the 7 cases has the finding. For any remaining new findings, give their shapes only (no text) and whether each looks genuinely too short. Update the unit tests (Db2, EC2, Java17 count; ABC-1234, CRQ numbers, versions, dates don't). No branches, tags or commits.
+Report the same table: Q-COMPLETE-04 findings, mismatches, gains/losses, score changes (count, min/max), status changes (from→to), each of the 7 cases, and the shapes of any new findings with your "genuinely too short?" view. Update the unit tests for the new rules (numbers and tag words count; ticket keys, record numbers and lone punctuation don't). No branches, tags or commits.
