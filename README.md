@@ -1,43 +1,31 @@
-Readability pass across the Console: larger secondary text and better contrast. Same standing rules: no git operations unless I ask; never read, search or print cr_core/config.py or cr_core/history/config.py; never read .env; live data only; no rule, score, finding or status changes; codes and counts only in replies.
+Pending decision placement, back-to-top everywhere, report column balance. Same standing rules: no git operations unless I ask; never read, search or print cr_core/config.py or cr_core/history/config.py; never read .env; live data only; no rule, score, finding or status changes; codes and counts only in replies.
 
-1. Global rules (define them once as shared CSS variables or type tokens, and replace the scattered sizes):
-   - No text smaller than 12 px, except uppercase labels (CLASS, PRODUCT, DECISION, column headers, section kickers), which are 11 px.
-   - Secondary text uses #5B6880. Use #8592A8 only for placeholders, disabled or zero-count items, and decorative separators.
-   - Multi-line text uses a line-height of about 1.5.
+1. Pending Change cell:
+   - Remove the DECISION row from the label grid; the grid keeps PRODUCT only.
+   - Show the decision on the CRQ line after "✓ Viewed", separated by a muted "·": "CRQ000002480998  ✓ Viewed · ✓ Approved". Use the existing outlined decision pill style (12 px).
+   - Show it only when a decision is made; no "Not decided" text anywhere in the row. If the change isn't viewed but has a decision, show only the decision pill (no leading separator).
+   - Same in the phone cards. The calendar dots and tooltips, "Decided N of M" and Copy Decisions are unchanged.
 
-2. Pending table:
-   - CRQ 13 → 14 px; summary 14 → 15 px.
-   - PRODUCT value 12 → 13 px; the PRODUCT/DECISION labels 10 → 11 px (#8592A8 is allowed for these labels only); "Not decided" 12 → 13 px in #5B6880.
-   - Window line 13 → 14 px; second line ("9 h · starts in 9 days") 12 → 13 px.
-   - Impact and Class lines 12 → 13 px.
-   - Viewed and decision pills, and the freeze and Today/Tomorrow tags: 11 → 12 px.
-   - Results line and the Review decisions bar: 13 px in #5B6880.
-   - Keep the column widths. Window's lines still must not wrap at 1440 px.
+2. Back to top, as one shared component:
+   - A round button, bottom-right, 40 px, white with a #CFD7E3 border and a soft shadow, an ↑ icon, aria-label and tooltip "Back to top".
+   - It appears after scrolling more than one viewport height and hides near the top. Smooth scroll, or instant under prefers-reduced-motion. Focus moves to the page's main heading afterwards.
+   - Use it on Pending (replace the existing one), Rules, the standalone Quality report and Executive brief, and inside the overlay.
+   - In the overlay, it attaches to the overlay's own scroll container, scrolls the embedded report (not Pending), and sits inside the overlay frame clear of the toolbar.
+   - It never covers the Technical details switch, the Review decisions bar or the sticky compact header; offset it when they're present.
+   - Any page that becomes long gets it automatically.
 
-3. Quality report (standalone and overlay):
-   - Issue text 13 → 14 px; "Looked for…" 11 → 12 px.
-   - "How to fix" 12 → 13 px in #0B5F59 on its existing pale background.
-   - At a glance labels and values 13 → 14 px; section labels (CHANGE, RISK, REQUEST, SCHEDULE) 11 px.
-   - Close match, Overlapping changes, Question for the owner and Full change details row text: 12 → 13 px.
-   - Severity tags and the Score line unchanged.
+3. Quality report layout: move "Question for the owner" from the right column to the left column, directly under the history comparison card ("Close match …"), so both columns end at a similar height. Same in the overlay. On phone, keep it after the issues.
 
-4. Rules page: rule title 13 → 14 px; description 12 → 13 px in #5B6880; Applies-to and Status text 12 → 13 px.
-
-5. Review page: the three feature descriptions 12 → 13 px in #5B6880.
-
-6. Leave unchanged: page headings, the header band, the View by card counts, column headers, buttons, filter chips and nav.
-
-7. Checks and tests:
-   - Add a check that fails if any visible text is under 12 px (11 px allowed only for uppercase labels).
-   - Add a check that body and secondary text meet WCAG AA contrast (4.5:1) against its background, excluding disabled and placeholder items.
-   - Check Pending, the report, Rules and Review at 1440 and 1920 px: no horizontal scroll, Window still on one line at 1440 px.
-   - Update the screenshots in work/preview/ and the user guide images, and add a CHANGELOG entry (no new version).
-   - Run the browser tests and `python scripts/check.py --browser --audit`; report counts.
+4. Tests and docs:
+   - Pending: decision on the CRQ line only when made (Approved, Needs work, none, not viewed + decided); no DECISION row.
+   - Back to top: hidden at first, visible after one viewport, scrolls to the top, and focus moves to the heading — on each page and in the overlay (scrolling the report, not Pending). No overlap with the bottom-right controls.
+   - Report: the card is in the left column.
+   Update the user guide and CHANGELOG (no new version). Run the browser tests and `python scripts/check.py --browser --audit`; report counts.
 
 No branches, tags or commits.
 
 
 git status
 git add -A
-git commit -m "Readability: larger secondary text, stronger contrast, shared type tokens across the Console"
+git commit -m "Pending: decision on the CRQ line when made; Back to top on all long pages and the overlay; balanced report columns"
 git push
