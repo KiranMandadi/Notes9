@@ -1,9 +1,5 @@
-Re-measure once more with these adjustments (still step 1; don't proceed to step 2):
+Apply your recommended fix: count a number, version, date or ratio only when it stands alone between spaces, not when it comes from splitting a joined code (underscore- or hyphen-joined). Re-measure (still step 1) and report the same table, the 7 cases, and the new findings by shape.
 
-1. Numbers, versions, dates and ratios COUNT as words again (as the current rule does). Do not drop them.
-2. Words inside bracketed tags COUNT (remove only the brackets).
-3. Still drop: ticket keys (letters, hyphen, 3+ digits), Remedy record numbers (CRQ/INC etc. with 5+ digits), single characters and standalone punctuation (e.g. a lone "-").
-4. Splitting unchanged: spaces, - / _ : and | , ;. Letters-then-digits names (Db2, EC2, Java17) count.
-5. #7 losing the finding is accepted.
+For the one change that moves from Needs work to Blocked: give me its change number in this chat only (not in any file or log) so I can review it myself, plus its score before and after and which other findings it has.
 
-Report the same table: Q-COMPLETE-04 findings, mismatches, gains/losses, score changes (count, min/max), status changes (from→to), each of the 7 cases, and the shapes of any new findings with your "genuinely too short?" view. Update the unit tests for the new rules (numbers and tag words count; ticket keys, record numbers and lone punctuation don't). No branches, tags or commits.
+No branches, tags or commits.
