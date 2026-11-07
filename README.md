@@ -1,5 +1,12 @@
-Apply your recommended fix: count a number, version, date or ratio only when it stands alone between spaces, not when it comes from splitting a joined code (underscore- or hyphen-joined). Re-measure (still step 1) and report the same table, the 7 cases, and the new findings by shape.
-
-For the one change that moves from Needs work to Blocked: give me its change number in this chat only (not in any file or log) so I can review it myself, plus its score before and after and which other findings it has.
-
+Approved. Proceed with step 2:
+- Make the content-word helper the default for Q-COMPLETE-04 and the audit check; remove the CHANGELENS_CONTENT_WORDS flag and any flag-off code path.
+- Bump the rule pack's minor version and update the rule's description if it says how words are counted (e.g. "ticket keys, record numbers and single characters don't count as words").
+- CHANGELOG and decisions.md: the fix, the word definition, and the measured impact (6,461 past changes: 0 mismatches, 4 findings removed, 7 added, 1 status change Needs work → Blocked). No change numbers in any file.
+- Rerun the full suite and `python scripts/check.py --browser --audit`; expect 0 mismatches. Report counts.
+- Delete work/tmp/words/ when done.
 No branches, tags or commits.
+
+git status
+git add -A
+git commit -m "Q-COMPLETE-04: count content words correctly (hyphenated words count; ticket keys, record numbers and lone characters don't). Audit mismatches 7 -> 0."
+git push
