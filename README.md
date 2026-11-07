@@ -1,6 +1,14 @@
-Pending: rename the first View by tab label from "ORR" to "Operational Risk Rating (ORR)". Keep the short "ORR" everywhere else: the "Grouped by ORR" caption, the table column header, the sort label, the cards ("4 – Very High"), the compact sticky header and the URL value (view=orr). Add a tooltip "Operational Risk Rating" on the ORR column header. Check the tab row still fits on one line at 1280 px and wraps cleanly on phone. Update tests and CHANGELOG (no new version). Run the browser tests; report counts. No branches, tags or commits.
+Pending View by labels. Same standing rules; no git operations unless I ask.
+- Tabs: "Operational Risk Rating (ORR)" | "Risk Level" | "Impact" | "Quality" (rename "Risk" → "Risk Level", "Readiness" → "Quality"; Impact unchanged).
+- Caption: "Grouped by ORR" / "Grouped by risk level" / "Grouped by impact" / "Grouped by quality".
+- Compact sticky header breadcrumb uses the same names.
+- Keep the URL values unchanged (view=orr|risk|impact|readiness) so existing links still work.
+- Card values unchanged; table column headers unchanged.
+- Check the tab row fits on one line at 1280 px and wraps cleanly on phone.
+- Update tests, user guide and CHANGELOG (no new version). Run the browser tests; report counts.
+No branches, tags or commits.
 
 git status
 git add -A
-git commit -m "Pending: remove Viewed; Review Decision pill wording; only Open opens a report; spell out Operational Risk Rating (ORR)"
+git commit -m "Pending: remove Viewed; Review Decision pill wording; only Open opens a report; clearer View by labels (Operational Risk Rating, Risk Level, Impact, Quality)"
 git push
