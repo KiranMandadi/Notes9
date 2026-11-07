@@ -1,18 +1,6 @@
-Two Pending changes. Same standing rules; no git operations unless I ask.
-
-1. Decision pill text: "Review Decision: Approved" / "Review Decision: Needs work" (same icons, outlined style and colours), also in the calendar tooltips and phone cards; on phones it may wrap below the CRQ. Overlay buttons, Copy Decisions and stored values unchanged.
-
-2. Rows are no longer clickable:
-   - Remove the row click handler, its role/tabindex, "Open report for …" row label and Enter-on-row behaviour; only "Open →" opens the overlay (Ctrl/⌘-click still opens a new tab).
-   - Default cursor on rows; text can be selected freely.
-   - Remove the row hover background. Keep the copy icon appearing on row hover and on keyboard focus of the CRQ; clicking it copies without opening anything.
-   - Keep the last-closed row highlight (background and navy left bar).
-   - Calendar bars stay clickable. Phone cards: only the Open button opens.
-
-Update tests (row click does nothing; Open opens; copy icon on hover copies without opening; text selection works) and the user guide, decisions.md and CHANGELOG (no new version). Run the browser tests; report counts. No branches, tags or commits.
-
+Pending: rename the first View by tab label from "ORR" to "Operational Risk Rating (ORR)". Keep the short "ORR" everywhere else: the "Grouped by ORR" caption, the table column header, the sort label, the cards ("4 – Very High"), the compact sticky header and the URL value (view=orr). Add a tooltip "Operational Risk Rating" on the ORR column header. Check the tab row still fits on one line at 1280 px and wraps cleanly on phone. Update tests and CHANGELOG (no new version). Run the browser tests; report counts. No branches, tags or commits.
 
 git status
 git add -A
-git commit -m "Pending: remove Viewed marks; Review Decision pill wording; only Open opens a report"
+git commit -m "Pending: remove Viewed; Review Decision pill wording; only Open opens a report; spell out Operational Risk Rating (ORR)"
 git push
