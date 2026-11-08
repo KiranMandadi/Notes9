@@ -1,14 +1,11 @@
-I've added organisations and groups to support_groups.yaml. Same standing rules (including Running commands); no git operations unless I ask. Do not print any organisation or group names; refer to them by position (org #n, group #n).
-1. Validate: run crq rules validate and the support_groups loader; report pass/fail.
-2. Typo check: for each NEW group, count its changes in Remedy over the last 90 days with an existing crq search option (read-only). Report "group #n: count". Flag any group with 0 as a possible name mismatch.
-3. Update the pinned tests: tests/test_enterprise.py (lines 33 and 70, group count) and tests/test_screens.py (line 79, organisation list) to the new values.
-4. Run python scripts/check.py; show me what fails. Do not run --update-baseline until I confirm.
-5. Run the accuracy audit (python scripts/check.py --browser --audit); report mismatches (expect 0) and the new rule-set id.
-6. Report the Pending load time (Console access log, POST /api/summary) before and after, and the new Pending total for all approvers.
-CHANGELOG entry (no names, just counts: "support groups: +N organisations, +M groups"). Run all tests with pytest; report counts.
-No branches, tags or commits.
+cp profiles/enterprise/config/support_groups.yaml ~/support_groups.new.yaml
+git restore profiles/enterprise/config/support_groups.yaml
 
-git status
-git add support_groups.yaml tests/baselines/enterprise.sha256 tests/test_enterprise.py tests/test_screens.py CHANGELOG.md
-git commit -m "Support groups: add new organisations and groups"
-git push
+Remedy searches fail with HTTP 414 (URI too long) when support_groups.yaml has more groups, because _qualification in cr_core/remedy/api.py puts every group into one GET URL. Same standing rules (including Running commands); no git operations unless I ask. Do not print group or organisation names.
+1. Split the group part of the qualification into batches so each request URL stays under a safe limit (configurable, default 4,000 characters for the full encoded URL). Run one search per batch with the same status/date/other terms, merge the results, and de-duplicate by change id. Keep sorting and paging correct across batches.
+2. Run batches with limited concurrency (default 3) to keep load time reasonable. Live data only, no caching.
+3. If a single group name alone would exceed the limit, fail with a clear message naming the group by position (group #n).
+4. Apply to every caller: Pending, Review search, crq search, crq summary, and the history pull if it builds the same qualification. The duplicate-by-reference check is unchanged.
+5. Make crq doctor report the longest request URL length and the number of batches, and say "URL too long" instead of a bare 414.
+Tests: unit tests for batching (1 batch at 44 groups, several batches with a large synthetic list), merge and de-duplication, and paging across batches. Do not change the pinned group counts yet. Run all tests with pytest; report counts and the Pending load time before and after (Console access log).
+No branches, tags or commits.
