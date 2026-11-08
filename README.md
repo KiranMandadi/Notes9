@@ -1,5 +1,4 @@
-Pending fixes. Same standing rules (including Running commands); no git operations unless I ask.
-1. Report column: Open button top-aligned again (align-self: start), with its text on the same line as the CRQ number and the Quality score; keep it horizontally centred, with the REPORT header centred.
-2. Review decisions count scope: "Decided N of M" — M = changes matching the filter bar (Class, Date, Organisation, Group, Approver), ignoring the View by selection and search; N = decided changes within that set. Copy Decisions still copies every recorded decision in the session, and Clear still clears all. Example: 40 loaded, 1 Standard hidden by the default Class filter → "of 39"; selecting a View by value or searching does not change it.
-Update the browser tests (count with a class-hidden change; count unchanged by View by and search) and screenshots; CHANGELOG (no new version). Run the browser tests with pytest; report counts.
+Pending: Report column alignment. Same standing rules (including Running commands); no git operations unless I ask.
+Align the Open button's vertical centre with the vertical centre of the Quality cell's score + status pill stack in the same row (e.g. give the Report cell the same top offset and min-height as that stack and centre the button inside it). Keep it horizontally centred, header REPORT centred. Do not change any other column's alignment. Must hold for rows of any height and for both 1-line and 2-line summaries.
+Add a browser test asserting the Open button centre and the Quality stack centre differ by ≤ 2 px on several rows. Update screenshots; CHANGELOG (no new version). Run the browser tests with pytest; report counts.
 No branches, tags or commits.
