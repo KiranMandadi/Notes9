@@ -1,4 +1,1 @@
-git status
-git add -A
-git commit -m "Pending: divider between Filters and View by, centred Quality column, Open aligned to Quality, decisions count follows the filter bar"
-git push
+Read-only check, no code changes. For the current Pending data (all approvers, all classes), report a count of changes by Remedy Status, and the same for the default approver only. Also report how long the Pending fetch takes today. Codes, counts and timings only. Use an existing crq command or pytest helper; no inline Python.
