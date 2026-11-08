@@ -1,17 +1,31 @@
-Pending: redesign the View by area (mock-up "Pending - View by options", option A). Same standing rules; no git operations unless I ask.
-1. Tabs: replace the folder tabs and the grey panel with a plain underline tab row on the white filter card: "VIEW BY" label (11 px caps, #5B6880), then Operational Risk Rating (ORR) · Risk Level · Impact · Quality. Active tab: #0B1B33, 600, 2 px navy underline; others #5B6880, 400. 1 px #E6EBF2 rule under the row. Keep "Grouped by <dimension>" right-aligned on the same row, unchanged.
-2. All tile (first, 196 px): label "All changes", total count (26 px, 600).
-   - Active (default, no value picked): background #0B1B33, white text, white ✓ circle top-right, sub-line "Showing every change" (#C9D4E6).
-   - Inactive (a value is picked): white, 1 px #DDE3EC border, navy text, sub-line "Show all" (teal #0E7C74, underlined). Clicking the tile clears the selection.
-   Then a 1 px #E6EBF2 vertical divider.
-3. Value cards (172 px fixed, left-aligned, 12 px gap, wrap):
-   - Unselected: white, 1 px #DDE3EC border, label (13 px, 500) with % right, count (26 px, 600), 4 px share bar (track #EEF1F6).
-   - Selected: background #0B1B33, white label and count, white ✓ top-right, share bar replaced by "<pct>% of <total> · showing" (#C9D4E6). While a value is selected, other cards go to opacity 0.6. Clicking the selected card again clears it.
-   - Zero-count: opacity 0.45, not clickable (as today).
-   - Share bar colours: ORR, Risk Level, Impact use navy shades by level, highest first: #0B1B33, #3A5280, #7F93B8, #C3CEE0. Quality uses Blocked #C2410C, Needs work #D9A23A, Ready #2F8A5B. Remove the old coloured dots.
-4. Switching tabs clears the selection. URL parameters and filtering logic unchanged.
-5. Results line: when a value is selected, "Showing N of M · <dimension short name> <value>", e.g. "Showing 11 of 30 · ORR 3 – High".
-6. Accessibility: tile and cards are buttons with aria-pressed; visible focus ring; Enter/Space toggles.
-7. Phone: tiles wrap two per row; the divider hides.
-Check at 1440 and 1920 px, with 2 and 30 changes, on all four tabs. Update the browser tests and screenshots; CHANGELOG (no new version). Run the browser tests; report counts.
+Pending View by follow-ups + Copilot command rule. Same standing rules; no git operations unless I ask.
+
+1. Value cards: remove the share bars. Every card (All tile included) has the same three lines, so heights match with no empty space:
+   - Line 1: label (13 px, 500); white ✓ circle on the right when selected. Remove the % from the top-right.
+   - Line 2: count (26 px, 600).
+   - Line 3 (12 px): unselected "<pct>% of all" (#5B6880); selected "<pct>% of all · showing" (#C9D4E6 on navy); zero-count "None".
+   - All tile line 3 unchanged ("Showing every change" / "Show all").
+   Remove the bar colour tokens if nothing else uses them.
+
+2. Add a "FILTERS" label at the left of the filter chip row, same style as "VIEW BY" (11 px, 600, caps, letter-spacing 0.7px, #5B6880). Both labels sit in a shared 76 px label column. The first filter chip, the first View by tab and the grey panel all start on the same left edge. Phone: labels sit above their row.
+
+3. Go back to folder tabs for View by: the active tab has background #F1F4F8 and rounded top corners (10 px). Inactive tabs are plain text (#5B6880) with no background. Use no underline and no rule under the tab row. The tiles sit in a #F1F4F8 panel (14 px padding, 12 px radius; top-left corner 0 when the first tab is active).
+   The active tab must join the panel seamlessly: no white gap, border or line between them (tab overlaps the panel by 1 px, no padding or margin between the tab row and the panel). Keep "Grouped by <dimension>" right-aligned on the tab row.
+
+4. Remove the opacity fade on unselected value cards when a value is selected. Only zero-count cards are muted (0.45, not clickable). The selected card stays solid navy with ✓.
+
+5. Review decisions bar must ignore View by, search and every other filter on the page: "Decided N of M" counts across all changes for the current approver scope (as loaded), Copy Decisions copies all recorded decisions, and Clear clears all. Example: 2 changes, 1 decided, View by ORR 4 – Very High selected → still "Decided 1 of 2".
+
+6. Add this section to .github/copilot-instructions.md and follow it from now on, including for this task:
+   ## Running commands
+   - Never run inline Python (`python -c`, `python -` with heredocs, or `bash -c "python ..."`). Endpoint security flags these.
+   - To run Python, use an existing entry point: `crq ...`, `pytest ...`, or `python scripts/<name>.py`. If a one-off helper is needed, ask first; if I agree, create it as a file under scripts/ and run that file.
+   - Prefer the editor's search and file tools over shell commands for reading and searching files.
+
+Check at 1440 and 1920 px on all four tabs, zooming in on the tab/panel join. Update the browser tests (add one for item 5: decide a change, filter it out, check the count and copied text) and screenshots; CHANGELOG (no new version). Run the browser tests with pytest; report counts.
 No branches, tags or commits.
+
+git status
+git add -A
+git commit -m "Pending: View by redesign (folder tabs, All tile, three-line cards), Filters label, decisions count ignores filters; Copilot command rule"
+git push
