@@ -1,9 +1,14 @@
-Read-only check, no code changes, no git. Explain how support_groups.yaml and the Pending Organisation/Group filters work:
-1. How are the Organisation and Group filter values on Pending generated: from support_groups.yaml, from the loaded change data, or both? Name the function(s) and file(s).
-2. Does support_groups.yaml limit which changes the Pending fetch pulls from Remedy (the "changes for your groups" scope)? If yes, how is it applied to the query?
-3. The file's expected structure (keys, nesting), with one example entry using placeholder names, not real ones. Are names matched exactly (case, spaces)?
-4. Is it covered by the enterprise baseline hash (tests/baselines/enterprise.sha256)? Would editing it need check.py --update-baseline?
-5. Is it read at Console start-up only, or on every load or Refresh?
-6. What else uses it: history pull, Review, Rules, Executive brief, Copilot agents, tests?
-7. If I add new organisations and groups: what will change on Pending, and what is needed (restart, baseline, tests, VM update)?
-Codes, file paths and counts only. No inline Python. Do not print real group or organisation names.
+I've added organisations and groups to support_groups.yaml. Same standing rules (including Running commands); no git operations unless I ask. Do not print any organisation or group names; refer to them by position (org #n, group #n).
+1. Validate: run crq rules validate and the support_groups loader; report pass/fail.
+2. Typo check: for each NEW group, count its changes in Remedy over the last 90 days with an existing crq search option (read-only). Report "group #n: count". Flag any group with 0 as a possible name mismatch.
+3. Update the pinned tests: tests/test_enterprise.py (lines 33 and 70, group count) and tests/test_screens.py (line 79, organisation list) to the new values.
+4. Run python scripts/check.py; show me what fails. Do not run --update-baseline until I confirm.
+5. Run the accuracy audit (python scripts/check.py --browser --audit); report mismatches (expect 0) and the new rule-set id.
+6. Report the Pending load time (Console access log, POST /api/summary) before and after, and the new Pending total for all approvers.
+CHANGELOG entry (no names, just counts: "support groups: +N organisations, +M groups"). Run all tests with pytest; report counts.
+No branches, tags or commits.
+
+git status
+git add support_groups.yaml tests/baselines/enterprise.sha256 tests/test_enterprise.py tests/test_screens.py CHANGELOG.md
+git commit -m "Support groups: add new organisations and groups"
+git push
