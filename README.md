@@ -1,15 +1,13 @@
-Read-only check, no code changes, no git. Do not print group or organisation names; use positions from support_groups.yaml.
-For each of the 65 groups flagged 0 by scripts/group_counts.py:
-1. Which Remedy field does the ChangeLens group filter match on (field id and label)?
-2. Does a support group with this exact name exist in Remedy's support group list? Report: exists exactly / exists with a case or spacing difference / not found.
-3. Over the last 90 days, how many changes does it have in other group fields (e.g. manager group, coordinator group, task assignee group)? Report counts per field.
-4. Summarise: likely typo (not found or near-match), real group but not used in the searched field, or real group with no recent changes.
-Extend scripts/group_counts.py only if needed to do this (file, not inline), read-only. Report positions, categories and counts only.
+Same standing rules; no git operations unless I ask.
+The 139-group support_groups.yaml is final and confirmed correct (no typos).
+1. Update the data-owner record in docs/setup-enterprise.md to 9 organisations / 139 groups (no names). Note that some groups have no recent changes as Manager Group, which is expected.
+2. Add to docs/open-items.md: "Pending 'your groups' matches Manager Group (1000000015), not Coordinator Group (1000003229); the field-map comment saying they hold the same value is wrong. Business decision needed before any change." Correct that comment in remedy_field_map.yaml to state the two fields are different.
+3. Run all tests with pytest; report counts.
+No branches, tags or commits.
 
-
-   python scripts/check.py --update-baseline
-   python scripts/check.py
-   git status
-   git add profiles/enterprise/config/support_groups.yaml tests/baselines/enterprise.sha256 docs/setup-enterprise.md
-   git commit -m "Support groups: verified names; baseline updated"
-   git push
+python scripts/check.py --update-baseline
+python scripts/check.py
+git status
+git add tests/baselines/enterprise.sha256 scripts/group_counts.py docs/setup-enterprise.md docs/open-items.md profiles/enterprise/config/remedy_field_map.yaml
+git commit -m "Support groups: baseline for 139 groups; group_counts diagnostics; Manager vs Coordinator group noted"
+git push
