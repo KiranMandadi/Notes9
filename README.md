@@ -1,4 +1,4 @@
-Pending: Report column alignment. Same standing rules (including Running commands); no git operations unless I ask.
-Align the Open button's vertical centre with the vertical centre of the Quality cell's score + status pill stack in the same row (e.g. give the Report cell the same top offset and min-height as that stack and centre the button inside it). Keep it horizontally centred, header REPORT centred. Do not change any other column's alignment. Must hold for rows of any height and for both 1-line and 2-line summaries.
-Add a browser test asserting the Open button centre and the Quality stack centre differ by ≤ 2 px on several rows. Update screenshots; CHANGELOG (no new version). Run the browser tests with pytest; report counts.
-No branches, tags or commits.
+git status
+git add -A
+git commit -m "Pending: divider between Filters and View by, centred Quality column, Open aligned to Quality, decisions count follows the filter bar"
+git push
