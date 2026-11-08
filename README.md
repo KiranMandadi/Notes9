@@ -1,11 +1,5 @@
-Pending polish. Same standing rules (including Running commands); no git operations unless I ask.
-1. Filter card: add a 1 px #EEF1F6 horizontal rule between the FILTERS row and the VIEW BY row, spanning the full inner width of the card, with equal spacing above and below (match the current gap). No other lines added.
-2. Quality column: centre the score and the status pill horizontally as one stacked unit; centre the QUALITY header (sort icon included). Keep the cell top-aligned so the score stays on the row's first line.
-3. Report column: centre the Open button horizontally and vertically within the row (align-self: center); centre the REPORT header. All other cells stay top-aligned.
-Check with 1-line and 2-line summaries at 1440 and 1920 px. Update the browser tests and screenshots; CHANGELOG (no new version). Run the browser tests with pytest; report counts.
+Pending fixes. Same standing rules (including Running commands); no git operations unless I ask.
+1. Report column: Open button top-aligned again (align-self: start), with its text on the same line as the CRQ number and the Quality score; keep it horizontally centred, with the REPORT header centred.
+2. Review decisions count scope: "Decided N of M" — M = changes matching the filter bar (Class, Date, Organisation, Group, Approver), ignoring the View by selection and search; N = decided changes within that set. Copy Decisions still copies every recorded decision in the session, and Clear still clears all. Example: 40 loaded, 1 Standard hidden by the default Class filter → "of 39"; selecting a View by value or searching does not change it.
+Update the browser tests (count with a class-hidden change; count unchanged by View by and search) and screenshots; CHANGELOG (no new version). Run the browser tests with pytest; report counts.
 No branches, tags or commits.
-
-git status
-git add -A
-git commit -m "Pending: divider between Filters and View by, centred Quality and Report columns"
-git push
