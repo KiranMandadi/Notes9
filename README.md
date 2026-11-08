@@ -1,11 +1,21 @@
-cp profiles/enterprise/config/support_groups.yaml ~/support_groups.new.yaml
-git restore profiles/enterprise/config/support_groups.yaml
+   git status
+   git add -A
+   git commit -m "Pending: Status filter (four approval stages, default Scheduled For Approval, other stages on demand)"
+   git push
 
-Remedy searches fail with HTTP 414 (URI too long) when support_groups.yaml has more groups, because _qualification in cr_core/remedy/api.py puts every group into one GET URL. Same standing rules (including Running commands); no git operations unless I ask. Do not print group or organisation names.
-1. Split the group part of the qualification into batches so each request URL stays under a safe limit (configurable, default 4,000 characters for the full encoded URL). Run one search per batch with the same status/date/other terms, merge the results, and de-duplicate by change id. Keep sorting and paging correct across batches.
-2. Run batches with limited concurrency (default 3) to keep load time reasonable. Live data only, no caching.
-3. If a single group name alone would exceed the limit, fail with a clear message naming the group by position (group #n).
-4. Apply to every caller: Pending, Review search, crq search, crq summary, and the history pull if it builds the same qualification. The duplicate-by-reference check is unchanged.
-5. Make crq doctor report the longest request URL length and the number of batches, and say "URL too long" instead of a bare 414.
-Tests: unit tests for batching (1 batch at 44 groups, several batches with a large synthetic list), merge and de-duplication, and paging across batches. Do not change the pinned group counts yet. Run all tests with pytest; report counts and the Pending load time before and after (Console access log).
+   Option 1: split the group search. Same standing rules (including Running commands); no git operations unless I ask. Do not print group or organisation names; refer to them by position.
+1. In cr_core/remedy, split the group part of the qualification into batches so each full encoded request URL stays under a configurable limit (default 4,000 characters). One search per batch with the same status/date/other terms; merge results and de-duplicate by change id; keep sorting and paging correct across batches. Limited concurrency (default 3). Live data only, no caching. The duplicate-by-reference check is unchanged.
+2. If a single group alone would exceed the limit, fail with a clear message naming it by position (group #n).
+3. Apply to every caller: Pending, Review search, crq search, crq summary, the audit's Overlaps check, and the history pull if it builds the same qualification.
+4. crq doctor: report the longest request URL length and the batch count; say "URL too long" instead of a bare 414.
+5. Add a read-only helper scripts/group_counts.py (a file, not inline) that reports, for each group in support_groups.yaml by position, the number of its changes in Remedy over the last 90 days. Flag 0 as "possible name mismatch".
+6. Test with the current 44-group file first: 1 batch, results identical to today (40 pending), Pending load time unchanged. Then copy work/support-groups/support_groups-9-orgs-139-groups.yaml into place and report: batch count, Pending total for all approvers, load time (median of 3 loads), group_counts.py results (positions and counts only), and the audit result (check.py --browser --audit).
+7. Update the pinned tests to 139 groups and 9 organisations only after step 6 passes. Do NOT run --update-baseline; I will after reviewing.
+Unit tests: batching at 44 and with a large synthetic list, merge/de-duplication, paging across batches, the long-single-group error. Run all tests with pytest; report counts.
 No branches, tags or commits.
+
+
+   git status
+   git add -A
+   git commit -m "Remedy: batch group searches to stay under the URL limit; support groups: 9 organisations, 139 groups"
+   git push
