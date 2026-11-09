@@ -1,3 +1,8 @@
-Q-VAGUE-01: add "validated" to its own reasons (alongside verified, tested). Same standing rules (including Running commands); no git operations unless I ask. If you ask me something and get no answer, stop and wait.
-1. Before changing anything, run crq rules measure Q-VAGUE-01 with and without "validated" over the 6,461 audit changes and report: how many findings would disappear, and quote the triggering sentence plus the sentence before it for 10 of them (by change number), so I can judge whether each is a real reason.
-2. Stop and wait for my go-ahead before editing the pack.
+Go ahead: add "validated" to Q-VAGUE-01's own reasons, bump the pack version, update the rules catalogue and CHANGELOG (no new version). Run python scripts/check.py --browser --audit and report the old and new rule set id, mismatches (expect 0) and any score or status differences (expect 0 on the audit set). Do not run --update-baseline; I will. Run all tests with pytest; report counts. No branches, tags or commits.
+
+python scripts/check.py --update-baseline
+python scripts/check.py
+git status
+git add -A
+git commit -m "Q-VAGUE-01: accept 'validated' as a reason"
+git push
