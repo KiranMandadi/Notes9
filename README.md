@@ -1,6 +1,4 @@
-python scripts/check.py --update-baseline
-python scripts/check.py
-git status
-git add -A
-git commit -m "At a glance: Risk Report group with aggregate risk value and ORR; flag when Risk Level differs; CV-03 wording"
-git push
+Read-only check, no code changes, no git. Explain CV-03 exactly:
+1. Its condition (fields, values, thresholds), severity, points and mode, from the rule pack and code.
+2. Why it fired on CRQ000002486526 (Risk Level 1, Risk Level - Computed 4, Notes say "No impact").
+Codes and values only.
