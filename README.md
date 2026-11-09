@@ -1,1 +1,1 @@
-Read-only check, no code changes, no git. For CRQ000002486526 and 5 other pending changes, report side by side: Risk Level (1000000180), Risk Level - Computed (301557300), and the Aggregate Risk Value shown in Remedy's Change Risk Report (form CHG:ChangeRiskReportDialog, or its underlying fields). Are Computed and Aggregate always equal? If not, which field holds the Aggregate Risk Value? Codes and values only.
+ its underlying fields). Are Computed and Aggregate always equal? If not, which field holds the Aggregate Risk Value? Codes and values only.
