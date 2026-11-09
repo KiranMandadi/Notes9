@@ -1,1 +1,1 @@
-Read-only check, no code changes, no git. For CRQ000002486526, which exact occurrence of "no impact" in Notes triggered the Q-COMPLETE "no impact without a reason" finding (quote ~120 characters around it, by position), and what does the rule treat as "a reason" (words/patterns that suppress it)? Would "No impact as the servers will be out of load" suppress it? Codes and text only.
+ Would "No impact as the servers will be out of load" suppress it? Codes and text only.
