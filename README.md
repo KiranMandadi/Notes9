@@ -1,1 +1,3 @@
- Would "No impact as the servers will be out of load" suppress it? Codes and text only.
+Q-VAGUE-01: add "validated" to its own reasons (alongside verified, tested). Same standing rules (including Running commands); no git operations unless I ask. If you ask me something and get no answer, stop and wait.
+1. Before changing anything, run crq rules measure Q-VAGUE-01 with and without "validated" over the 6,461 audit changes and report: how many findings would disappear, and quote the triggering sentence plus the sentence before it for 10 of them (by change number), so I can judge whether each is a real reason.
+2. Stop and wait for my go-ahead before editing the pack.
