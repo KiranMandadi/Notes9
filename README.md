@@ -1,12 +1,11 @@
-Filter popover polish. Same standing rules; no git operations unless I ask. UI only; rule set id unchanged — confirm it.
-1. Keep "Only" on every multi-select (Class, Status, Organisation, Group rows and Group organisation headings).
-2. "Only" visibility: show it only on mouse hover of its row, or when the row has :focus-visible (keyboard navigation). Never visible by default. When a popover is opened by mouse click, put focus on the popover container (not the first row), so nothing shows "Only" until hovered. Opening by keyboard may focus the first row as today.
-3. Status popover: on hover/focus-visible of an unloaded stage row, hide "Loads when selected" and show "Only" in its place (no overlap). On loaded rows, "Only" sits before the count as elsewhere.
-4. Class popover footer: one line, "N of M selected · Standard not included by default" when Standard is unticked; otherwise just "N of M selected".
-Tests: opening each popover by click shows no "Only"; hovering a row shows it; Tab into the list shows it on the focused row. Update screenshots; CHANGELOG (no new version). Run the browser tests with pytest; report counts.
-No branches, tags or commits.
+Q-VAGUE-01: measure "next-sentence explanation" before any change. Same standing rules (including Running commands); no git operations unless I ask. If you ask me something and get no answer, stop and wait. Do not edit the rule pack in this step.
 
-git status
-git add -A
-git commit -m "Pending filters: Select all/Clear/Only, zero-count values tucked away, honest labels, Group scoped by Organisation"
-git push
+Proposed rule change (Option A): a "no impact" claim also counts as explained when the sentence immediately after it (same field, same paragraph or the next line) explains the impact: it contains one of: impact, impacted, unaffected, not affected, continue, continues, remain, remains, existing … system / existing … process. The current checks (reason words in the claim's own or previous sentence, skip_impact_answers, Q-VAGUE-04 for labelled backout answers) stay unchanged. The next sentence must not itself be another bare "no impact" claim (e.g. "No impact." followed by "No impact to clients." does not count).
+
+1. Over the 6,461 audit changes, report:
+   - how many Q-VAGUE-01 findings would be removed (and in which fields);
+   - score changes (from → to, counts) and status changes (counts);
+   - confirm no other rule's findings change.
+2. Quote 10 removed findings, chosen to show variety (not 10 of the same template): change number, the claim sentence, and the next sentence. Include CRQ000002484053 as one of them.
+3. Also list any removed finding where the next sentence is weak (only repeats "no impact" in other words, or names nothing that continues or stays unaffected), with a count.
+4. Report results only. Stop and wait for my go-ahead before editing anything.
