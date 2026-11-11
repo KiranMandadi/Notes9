@@ -1,4 +1,9 @@
-Correction to item 2: do NOT move the Review decisions bar. Restore "Review decisions · Decided N of M · Copy Decisions" to its previous place — above the table, right-aligned, same style and spacing as before this task. Only the hidden-changes pill lives in the results row (after "Showing N of M"); the line above the table now holds just the decisions bar on the right. Update the affected browser test(s) to assert the bar is above the table on the right. UI tier: ruff + browser tests -k "pending or filter". No git operations.
+Pending polish. Same standing rules; no git operations unless I ask. UI only; rule set id unchanged.
+1. Hidden-changes pill: neutral style — background #EEF1F6, text #44516A, no border; keep the "Show all M" link teal #0E7C74 underlined. Same size and position (results row, after "Showing N of M").
+2. Restore the Review decisions bar ("Review decisions · Decided N of M · Copy Decisions · Clear") to its previous place: above the table card, right-aligned, outside the card, same style and spacing as before this round. The table's results row holds only: sorted-by text, "Showing N of M", the pill (left) and the search box (right) on one line.
+3. Risk Level chip label: show the value without repeating the name — "Risk Level 5, 4, 3" (not "Risk Level Risk Level 5, 4, 3"); "Risk Level All" when all are ticked.
+Tests (UI tier): pill colours; decisions bar above the table card on the right and not inside it; search on the same line as the results text; Risk Level chip label. Run ruff and browser tests -k "pending or filter". One CHANGELOG line.
+No branches, tags or commits.
 
 
 git status
