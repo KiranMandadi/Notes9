@@ -1,4 +1,7 @@
-   Leave the images as they are. Also, with zoom: verify popover/dropdown positions, the report overlay, calendar bars, tooltips, the sticky header and "Back to top" at 1440 and 1920 px; fix any offsets in the code that positions them. Keep phones (< 720 px) unchanged. Saved quality report files keep their current size.
+Pending table: summary text size. Same standing rules; no git operations unless I ask. UI only.
+Change the summary line under the change number to the same font size and line height as the Window column's main text (13 px before the page scale), colour unchanged (#1C2A42). Product line unchanged. Apply in list view and phone cards; the overlay and report are unchanged.
+Tests (UI tier): summary font size equals the window text size. Run ruff and browser tests -k pending. One CHANGELOG line.
+No branches, tags or commits.
 
 
 git status
