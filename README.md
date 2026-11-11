@@ -1,25 +1,24 @@
-Pending: replace View by with ORR / Risk Level / Impact / Quality filters (mock-up "Pending - filters without View by", layout B "By meaning"). Same standing rules from .github/copilot-instructions.md; no git operations unless I ask. If you ask me something and get no answer, stop and wait. UI/filter logic only; rule set id unchanged — confirm it.
+Pending filter fixes. Same standing rules from .github/copilot-instructions.md; no git operations unless I ask. If you ask me something and get no answer, stop and wait. UI/filter logic only; rule set id unchanged — confirm it.
 
-1. Remove the View by area entirely (tabs, All tile, value cards, tray, "Grouped by"). Table sort stays ORR, then risk, then start time.
-2. Filter card, two labelled rows (labels in the existing 76–92 px label column, same style as today's "FILTERS"):
-   - RISK: ORR · Risk Level · Impact · Quality
-   - SCOPE: Status · Class · Date · Organisation · Group · Approver · Clear all (right)
-   1 px #EEF1F6 rule between rows. Same chip and popover component as Class/Status (Select all / Clear / Only / Default where it has a default, counts, zero-count values tucked under "Show N with no changes", Done, Esc restores, full labels, no ellipsis).
-3. New filters and values:
-   - ORR: 4 – Very High, 3 – High, 2 – Medium, 1 – Low, Not assessed.
-   - Risk Level: Risk Level 5 … Risk Level 1 (field 1000000180).
-   - Impact: 1 – Extensive … 4 – Minor (same wording as the table).
-   - Quality: Blocked, Needs work, Ready.
-   Labels: "All" when everything with changes is ticked; the value names when 1–2 ticked (Risk Level as "Risk Level 5, 4, 3"); otherwise "N selected".
-4. Defaults depend on the view:
-   - My approvals (default approver set): ORR = 4 – Very High + 3 – High; Risk Level = 5, 4, 3; Impact All; Quality All; Class All except Standard; Status Scheduled For Approval.
-   - All approvers ("Show all approvers" or removing the Approver): ORR All; Risk Level All; others as above.
-   - "Show my approvals" returns to the my-approvals defaults.
-   - Clear all resets every filter to the defaults of the current view (my approvals keeps the approver; all approvers keeps All approvers). Search text is cleared too.
-   - Chip style: white when at its view default or All; teal only when narrowed beyond the default.
-5. Hidden-changes pill: on its own line above the table card, left-aligned (the Review decisions bar stays on the right of the same line). Shown only when filters hide changes: "Showing N of M · K hidden by <filter names> filter(s) · Show all M". M = changes for the current approver scope at the selected Status, before Class/ORR/Risk Level/Impact/Quality/Date/Organisation/Group/search; name only the filters actually hiding changes. "Show all M" sets those filters to All. Style: background #FDF0DC, border #F1D3A1, text #6B3A06, "Showing N of M" bold, link #0E7C74 underlined. Headline shows the total: "<Name> · M changes" / "All approvers · M changes".
-6. URL: new parameters orr, risk, impact, quality (comma lists of short codes); none when at the view default; remove the old view-by parameters, and old view-by URLs open the page with defaults (no error). Approver and search text never in the URL.
-7. Calendar and Review decisions bar follow the same filters. Copy Decisions unchanged.
-8. Phone: rows stack; the pill wraps.
-Tests (UI tier + filter logic): defaults in both views; Show all approvers / Show my approvals; Clear all per view; each new filter narrows the table; labels; pill text, filter names, hidden count and "Show all" link; URL round-trip and old view-by URLs; calendar follows filters. Run ruff, unit tests for touched modules, and the Pending browser tests (-k pending or filter or calendar). List decisions under "Decided"; one CHANGELOG line (no new version).
+1. ORR and Risk Level defaults (my approvals view) are fixed selections, independent of counts:
+   - ORR default = 4 – Very High + 3 – High ticked even when either has 0 changes. Risk Level default = Risk Level 5, 4, 3 ticked even when any has 0 changes.
+   - These two filters always list every value in fixed order (ORR: 4 – Very High, 3 – High, 2 – Medium, 1 – Low, Not assessed; Risk Level: 5, 4, 3, 2, 1). Zero-count values stay in place with a greyed "0" count, still tickable; no "Show/Hide … with no changes" link for these two.
+   - Labels for these two never collapse to "All" unless every value is ticked: default reads "ORR 4 – Very High, 3 – High" and "Risk Level 5, 4, 3".
+   - All approvers view: both default to every value ticked ("All"). Other filters keep current behaviour.
+
+2. Hidden-changes pill moves into the table's results row, right after "Showing N of M": "Sorted by ORR, then risk, then start time · Showing N of M · [K hidden by … · Show all M]". Pill shown only when K > 0; same colours. Remove the separate line above the table entirely; move "Review decisions · Decided N of M · Copy Decisions" into the same results row, before the search box. No duplicate "Showing" text anywhere.
+
+3. Header link in all-approvers view: replace "Show my approvals" with "Show only <configured approver display name>" (e.g. "Show only Srinivas Sasapu"). If no default approver is configured, hide the link.
+
+4. Approver text box: show a small "×" clear button inside the box on the right, only when it contains text (hover darkens it; tooltip "Clear"; keyboard-focusable; aria-label "Clear approver"). Clicking it empties the text, keeps focus in the box, and applies the all-approvers view and its defaults (same as removing the approver today). Esc inside the box does the same. Keep the existing × on the Approver chip working as today.
+
+5. Phone: the results row wraps (pill on its own line, decisions and search below).
+
+Tests (UI tier): defaults with 0-count values stay ticked and labelled; fixed value order; label never "All" for a partial selection; pill inside the results row and the old line gone; decisions in the results row; "Show only <name>" link and hidden when no default approver; Approver clear button hidden when empty, shown with text, clears and switches to all approvers, Esc does the same. Run ruff, touched unit tests and browser tests -k "pending or filter". List decisions under "Decided"; one CHANGELOG line.
 No branches, tags or commits.
+
+
+git status
+git add -A
+git commit -m "Pending: View by replaced by Risk filters; fixed ORR/Risk Level defaults; pill in results row; Show only <name>; approver clear button"
+git push
