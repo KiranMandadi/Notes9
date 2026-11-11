@@ -1,6 +1,2 @@
-Q-VAGUE-01: measure accepting a mitigation sentence. Read-only; do not edit the rule pack. Same standing rules; no git operations unless I ask. If you ask me something and get no answer, stop and wait.
-Proposed: in the Notes field only, a "no impact" claim also counts as explained when the next sentence (same paragraph) states a mitigation: it contains roll back / rolled back / rollback / back out / revert AND mitigate / mitigation / within / in less than / minutes. Everything else in Q-VAGUE-01 and Q-VAGUE-04 unchanged.
-1. Over the 6,461 audit changes plus the live pending list, report: findings removed, score/status changes (from → to, counts), confirm no other rule changes.
-2. Quote 10 removed findings with variety (change number, claim sentence, next sentence), including CRQ000002468539.
-3. Count any removed finding where the next sentence is generic (e.g. only "rollback plan attached" with no time or action).
+
 Report only; stop and wait for my go-ahead. Delete any helper script afterwards.
