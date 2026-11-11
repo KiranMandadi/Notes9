@@ -1,12 +1,10 @@
-Remove "Question for the owner" completely. Same standing rules from .github/copilot-instructions.md; no git operations unless I ask. If you ask me something and get no answer, stop and wait.
-1. Remove the "Question for the owner" section from the Quality report (standalone page and Pending overlay), and the "· N question(s) for the owner" part of the report's summary line.
-2. Delete the code that builds and renders owner questions (templates, view/render helpers, JS/CSS, API fields) and any CLI or Executive summary output of them. Keep any helper the Quality report or Executive summary still uses for something else.
-3. STOP and ask before changing anything if owner questions are defined in the rule pack (YAML), affect scoring/findings, or are used by a Copilot agent — tell me where and what removing them would change.
-4. Remove mentions from docs (user-guide, contracts, README, agents section) and tests; add a one-line docs/decisions.md entry ("Question for the owner removed: not used by reviewers") and a CHANGELOG line (no new version).
-Tests: UI tier — ruff, unit tests for touched modules, browser tests for the report and overlay (-k report or overlay). Confirm the rule set id is unchanged. List anything you decided under "Decided".
+Two small follow-ups. Same standing rules; no git operations unless I ask.
+1. Old quality notes files that still contain a "questions" key: ignore that key silently instead of rejecting the file with INVALID_NOTES. Any other unknown key is still rejected as today. Add a unit test (notes file with "questions" loads fine; one with another unknown key still fails).
+2. Rename the test test_back_to_top_on_every_long_page_and_in_the_overlay_and_no_question_for_the_owner: split it into two clearly named tests — test_back_to_top_on_every_long_page_and_in_the_overlay and test_report_has_no_question_for_the_owner — same assertions, no behaviour change.
+Tests: UI tier — ruff, the notes unit tests, and the two browser tests by name. CHANGELOG: no entry needed for the test rename; one line under 0.46.0 for item 1.
 No branches, tags or commits.
 
 git status
 git add -A
-git commit -m "Remove Question for the owner from the report"
+git commit -m "Remove Question for the owner from the report; ignore legacy questions key in notes"
 git push
