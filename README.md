@@ -1,12 +1,12 @@
-Open reports in place: stay on the initiating page until the report is ready. Same standing rules from .github/copilot-instructions.md; no git operations unless I ask. If you ask me something and get no answer, stop and wait. UI only; rule set id unchanged — confirm it. Data stays live (no caching, no pre-loading).
-
-1. Review landing: on "Review change"/Enter, stay on the page. Button shows a spinner + "Reading CRQ…", input and button disabled. When the score and findings are ready, show the report page fully rendered (no "Reading … from Remedy" screen in between). Overlaps keep loading afterwards with their own placeholder, as today.
-2. Pending → Open: stay on the list. That row's Open button shows a spinner only (no text) and the row gets a subtle highlight (#F4F6FA). Other Open buttons stay usable; clicking another cancels the first request. The overlay opens only when the report is ready, fully rendered, Review Decision visible immediately.
-3. Overlay ‹ ›: keep the current report visible while the next loads; the toolbar "Next: <7 digits>" becomes "Loading <7 digits>…" with a small spinner, then the overlay switches to the new report. Esc during loading cancels the step and keeps the current report.
-4. Cursor: while any report is loading, set cursor: progress on the page (including over buttons and links); restore it the moment the report opens, fails or is cancelled.
-5. Slow: after 8 s, show "Still working — Remedy is slow to respond · Cancel" next to the spinner (landing: under the button; Pending: just above the table, left; overlay: in the toolbar). Esc also cancels.
-6. Failure: stay on the current page; show a short message next to the trigger ("Couldn't open CRQ… — Retry") with Retry. Never show an empty report page.
-7. Direct links, bookmarks and browser refresh of a report or ?open= URL keep today's report shell with "Reading…" (nothing to stay on).
-8. Keep: overlap lazy-loading, Review Decision timing (as soon as score + findings render), first-Open warm-up behaviour, "waiting for previous report" logic replaced by item 3.
-Tests (UI tier, report API mocked slow and failing): landing and Pending stay put while loading; button spinner and row highlight; cancel by clicking another Open and by Esc; overlay ‹ › keeps current report then switches; progress cursor set and cleared in every outcome; slow message after 8 s (time mocked); failure message with Retry and no empty report; direct ?open= URL still shows the shell. Run ruff and browser tests -k "review or pending or overlay". List decisions under "Decided"; one CHANGELOG line.
+Failure messages: show the reason in the visible text, not only on hover. Same standing rules; no git operations unless I ask. UI only.
+- Not found: "CRQ000000012345 wasn't found in Remedy — check the number" (no Retry).
+- Sign-in/permission: "Remedy sign-in failed — check the Console's Remedy account" (no Retry).
+- Timeout/server/other: "Couldn't open CRQ… — Remedy didn't respond · Retry".
+Same places as today (landing under the button, Pending on the decisions-bar line, overlay toolbar). Keep the full technical reason as the tooltip.
+Tests (UI tier): each failure type shows its visible text and Retry only where listed. Run ruff and browser tests -k "review or pending or overlay". One CHANGELOG line.
 No branches, tags or commits.
+
+   git status
+   git add -A
+   git commit -m "Open reports in place with progress cursor; clear failure messages; table text and alignment fixes"
+   git push
