@@ -1,10 +1,4 @@
-Pending table: summary text size. Same standing rules; no git operations unless I ask. UI only.
-Change the summary line under the change number to the same font size and line height as the Window column's main text (13 px before the page scale), colour unchanged (#1C2A42). Product line unchanged. Apply in list view and phone cards; the overlay and report are unchanged.
-Tests (UI tier): summary font size equals the window text size. Run ruff and browser tests -k pending. One CHANGELOG line.
+Pending table text size. Same standing rules; no git operations unless I ask. UI only.
+Reduce these four from 14 px to 13 px (before the page scale), line height 1.5, colours unchanged: the summary under the change number, the window first line, the ORR value, and the risk level ("Risk Level 3"). Keep them all the same size. CRQ number, Quality score and pill, and all grey second lines unchanged. List view and phone cards.
+Tests (UI tier): the four elements share the same computed font size. Run ruff and browser tests -k pending. One CHANGELOG line.
 No branches, tags or commits.
-
-
-git status
-git add -A
-git commit -m "Pending: View by replaced by Risk filters; fixed ORR/Risk Level defaults; pill in results row; Show only <name>; approver clear button"
-git push
