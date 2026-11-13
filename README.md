@@ -1,6 +1,8 @@
-Exec Summary and Risk 4–5 findings: clearer text. Same standing rules; no git operations unless I ask. Exclude cr_core/config.py and cr_core/history/config.py from every search. Wording only — no change to when rules fire, severity or points; confirm the audit shows 0 mismatches and report the rule set id (it may change because message text lives in the pack; I'll run --update-baseline).
-1. Q-COMPLETE-10 (Major and the Scheduled advisory): under the issue line, show "Missing from the Exec Summary at the top of the Notes:" followed by a numbered list of only the unanswered questions, in their full standard wording, then "Searched: Notes – not found" (Notes as the usual link). Fix text: "Add an Exec Summary section at the top of the Notes and answer each question above." Remove the sentence about "No" being a valid answer.
-2. Q-COMPLETE-08 (Risk Level 4–5): same pattern — "Missing from the Notes:" with the full wording of each unanswered question (6, 6a, 7, 8, 9 as applicable), "Searched: Notes", fix "Answer each question above in the Notes."
-3. Same in the report page, Pending overlay and Copy text; the list must not be truncated.
-Tests (UI tier): only unanswered questions listed with full wording; no "No is a valid answer" text; Notes link present. Run ruff, unit tests for the rules' messages, browser tests -k "report or overlay", and python scripts/check.py --audit. One CHANGELOG line; update the rules catalogue wording.
-No branches, tags or commits.
+Report headline: always separate the "and N more" tail with a semicolon and the word "issue(s)", e.g. "…, answer Exec Summary question 3; and 2 more issues". UI text only. Tests: headline with 1 and with 2+ remaining issues. Run ruff and browser tests -k report. One CHANGELOG line. No branches, tags or commits.
+
+python scripts/check.py --update-baseline
+python scripts/check.py
+git status
+git add -A
+git commit -m "Exec Summary and Risk 4–5 findings list the missing questions in full; Scheduled status on demand"
+git push
