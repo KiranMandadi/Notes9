@@ -1,17 +1,16 @@
-Relationships (0.50.0). UI only.
-
-1) Remove the "Affected services" block (label, note and chips) from the Relationships panel in
-   the Console and the saved HTML report. Do NOT remove the underlying affected_services data:
-   first report where else it is used (rules, At a glance, overlaps, history, crq get) and keep
-   those uses unchanged. The Relationships table, filters and counts stay as they are.
-
-2) Relationships table: the Status column is vertically centred while the other cells are
-   top-aligned, so Status sits lower than Relationship / Request type / Summary, and the STATUS
-   header sits lower than the other headers. Make every cell (headers and rows) align to the
-   first text line: align-items:start, the same padding-top on all cells, and the same header
-   style.
-
-Tests: remove or adjust the Affected services browser checks; add a check that the Status cell
-and the Relationship cell share a top edge (±1px) in a row whose summary wraps onto two lines;
-confirm the rule set id is unchanged (7066972d). Run the Review browser tests and ruff only.
-Report where affected_services is used, files changed and counts. Then stop. No git.
+Tasks filters (UI only).
+- Add filter chips to the Tasks controls bar, same component as the Work detail Type filter
+  (multi-select checkboxes, per-value counts, Select all / Clear, label/value styling, teal
+  outline when active, max-height 320 + scroll, never clipped):
+  "Status All ▾" (values = status, e.g. Staged / Closed / Pending; Closed-cancelled shown as
+  "Closed (Cancelled)") and "Group All ▾" (assigned group).
+- Show a chip only when its column has 2+ distinct values; hide both chips when the change has
+  5 tasks or fewer.
+- Bar layout (one flex row): left = "Showing X of N" · Status · Group · Show segment (only when
+  need-attention > 0); right = expand button.
+- Filters combine with the Show segment and with sorting; Step muting/dividers use the visible
+  rows. Empty state: "No tasks match the filters · Select all" (resets both filters and Show).
+- "View task NN ↓" from a finding resets all task filters to All before opening the row.
+Browser tests: chip visibility rules (≤5 tasks, single value), multi-select, counts, combination
+with Show, empty state, View task reset. Run the Review browser tests and ruff only. Report
+files and counts; then stop. No git.
