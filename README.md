@@ -1,34 +1,39 @@
-Pending: remove the automatic fallback to all approvers.
+READ-ONLY task: inventory EVERY rule and setting related to implementation timing and windows.
+Change nothing.
 
-Today, when nothing awaits the configured/default approver (state.chose = false), who() falls
-back to all approvers and shows the yellow note "Nothing is awaiting <name> right now, so all
-approvers are shown." Change this:
+Include anything that checks or uses WHEN a change is implemented, for example:
+- Freeze / blackout / moratorium windows and freeze exceptions
+- Platform-specific windows: mainframe windows, distributed/open-systems windows, network,
+  database, or any per-platform / per-product / per-support-group window
+- Allowed days and hours (weekday/weekend, overnight, business hours, market/trading hours,
+  batch windows, start/end cut-offs)
+- Month-end, quarter-end, year-end, holiday or special-event restrictions
+- Lead time: how far ahead a change must be raised, submitted or approved (per class,
+  e.g. Normal / Expedited / Emergency / Standard, and per risk level)
+- Approval timing: approval required before start, CAB/meeting cut-offs
+- Window length / duration limits, multi-day changes, start in the past, already started,
+  end before start, missing dates
+- Overlaps/conflicts with other changes or outages, if any
+- How "Today", "Tomorrow", "started" and "Freeze · exception" are worked out on Pending
+- Any timezone handling (ET vs UTC vs local) used by these checks
 
-1) The page always lands on the configured approver, even with 0 changes. who() returns the
-   configured approver unless the user explicitly chose "All approvers" (Show all approvers
-   link, Approver chip, or a saved view). No automatic switch, ever.
-2) Remove the yellow fallback note and its code/CSS.
-3) The 0-changes screen stays exactly as it is today: headline "<name> · 0 changes",
-   "Show all approvers" link, Approver chip = <name>, "Showing 0 of 0", empty-table message
-   "No changes match the filters. Clear search and filters". No visual changes.
-4) Same in Calendar view.
-5) Unchanged: when no default approver is configured, the page shows all approvers as today;
-   Show all approvers / Show only <name> links; Clear all; saved views (flag on or off);
-   ORR/Risk Level defaults per approver.
+Look everywhere these can live: profiles/enterprise/config/*.yaml (all files), the rule
+packs, cr_core/quality/*, any other cr_core module that reads dates/times, docs/
+(rules, decisions, configuration), and tests that pin this behaviour.
 
-Tests: update tests that expect the fallback; add tests for (a) configured approver with 0
-changes stays on that approver with no note, (b) Show all approvers still works from there,
-(c) no configured approver still shows all approvers. Run only the Pending browser tests and
-ruff. Update CHANGELOG (under 0.48.0) and the user guide line that describes the fallback.
-Report files changed and counts, then stop. No git.
+Reply with:
+A) ONE table, one row per rule or setting:
+| Rule ID | Name | Severity (Blocker/Major/Minor/Advisory/none) | Exact trigger (condition,
+  thresholds, days/hours, timezone, which Remedy fields/dates) | Applies to (class, risk
+  level, platform/product/group, status, history replay) | Exceptions / overrides |
+  Config source (file + key) or "hard-coded in <file>" | Message shown |
+B) Every configured window/calendar exactly as stored (name, platform/scope, days, start–end
+   times, timezone, date ranges).
+C) Platform detection: how the code decides a change is mainframe vs other (which field,
+   values, mapping file).
+D) Gaps or risks: inconsistent, duplicated, hard-coded, or timezone-unsafe logic, and any
+   timing rule mentioned in docs but not implemented (or the reverse).
 
-
-git status
-git diff --stat
-git add -A
-git status
-git commit -m "Pending: no auto-fallback to all approvers; Quality score 13 px" -m "- Pending always lands on the configured approver, even with 0 changes
-- Yellow fallback note removed; Show all approvers stays one click away
-- Quality score 13 px, tabular numbers
-- Tests, user guide and CHANGELOG (0.48.0) updated"
-git push
+Rules: don't read cr_core/config.py, cr_core/history/config.py or .env. No git, no inline
+Python, no tests to run, no file changes. Rule IDs, conditions and config values are fine to
+show; no change numbers or people's names.
