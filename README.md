@@ -1,39 +1,27 @@
-READ-ONLY task: inventory EVERY rule and setting related to implementation timing and windows.
-Change nothing.
+READ-ONLY measurement — no rule, config or test changes. Use a temporary helper under work/
+and delete it afterwards; no inline Python. Codes and counts only (no change numbers,
+no people's names).
 
-Include anything that checks or uses WHEN a change is implemented, for example:
-- Freeze / blackout / moratorium windows and freeze exceptions
-- Platform-specific windows: mainframe windows, distributed/open-systems windows, network,
-  database, or any per-platform / per-product / per-support-group window
-- Allowed days and hours (weekday/weekend, overnight, business hours, market/trading hours,
-  batch windows, start/end cut-offs)
-- Month-end, quarter-end, year-end, holiday or special-event restrictions
-- Lead time: how far ahead a change must be raised, submitted or approved (per class,
-  e.g. Normal / Expedited / Emergency / Standard, and per risk level)
-- Approval timing: approval required before start, CAB/meeting cut-offs
-- Window length / duration limits, multi-day changes, start in the past, already started,
-  end before start, missing dates
-- Overlaps/conflicts with other changes or outages, if any
-- How "Today", "Tomorrow", "started" and "Freeze · exception" are worked out on Pending
-- Any timezone handling (ET vs UTC vs local) used by these checks
+Proposed CC-05 logic to MEASURE (do not implement):
+- Reference tasks = tasks whose NAME contains "implementation" or "certification"
+  (case-insensitive), status not Cancelled/Canceled/Bypassed (Closed DOES count).
+- If any reference task lacks scheduled start or end → fall back to the change window.
+- If no reference tasks → fall back to the change window.
+- Otherwise: Blocker if any reference task strictly overlaps a freeze period (ET, same
+  boundary logic as today); else if the change window overlaps a freeze → Advisory; else
+  nothing.
+- Exception Work Detail types still suppress, as today.
 
-Look everywhere these can live: profiles/enterprise/config/*.yaml (all files), the rule
-packs, cr_core/quality/*, any other cr_core module that reads dates/times, docs/
-(rules, decisions, configuration), and tests that pin this behaviour.
+Run over: (a) the live Pending set, (b) the history replay (all 6,461), and report:
+1) CC-05 hits today (current logic)
+2) under the proposal: Blocker / Advisory / no finding / fallback-to-window — counts
+3) how many current Blockers would become Advisory, and how many NEW Blockers would appear
+   (should be ~0; list the reason category if any)
+4) distinct task NAMES that matched (normalised, with counts) — top 40 — and separately the
+   names containing "post-implementation", "pre-implementation", "recertification", or
+   similar prefixes
+5) distinct task names that did NOT match but look like work (e.g. "deploy", "install",
+   "cutover", "release", "migration") — top 20 with counts, so we can see what we'd miss
+6) how many changes have reference tasks with missing dates (fallback)
 
-Reply with:
-A) ONE table, one row per rule or setting:
-| Rule ID | Name | Severity (Blocker/Major/Minor/Advisory/none) | Exact trigger (condition,
-  thresholds, days/hours, timezone, which Remedy fields/dates) | Applies to (class, risk
-  level, platform/product/group, status, history replay) | Exceptions / overrides |
-  Config source (file + key) or "hard-coded in <file>" | Message shown |
-B) Every configured window/calendar exactly as stored (name, platform/scope, days, start–end
-   times, timezone, date ranges).
-C) Platform detection: how the code decides a change is mainframe vs other (which field,
-   values, mapping file).
-D) Gaps or risks: inconsistent, duplicated, hard-coded, or timezone-unsafe logic, and any
-   timing rule mentioned in docs but not implemented (or the reverse).
-
-Rules: don't read cr_core/config.py, cr_core/history/config.py or .env. No git, no inline
-Python, no tests to run, no file changes. Rule IDs, conditions and config values are fine to
-show; no change numbers or people's names.
+One table for 1–3 and 6, two short lists for 4–5. No git.
