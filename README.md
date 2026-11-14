@@ -1,50 +1,31 @@
-Polish for the Tasks and Work detail rows (0.50.0). UI only; no data or rule changes.
+Final polish — Tasks, Work detail and report footer (0.50.0). UI only.
 
-1) Highlight from "View task" / "View work detail": the amber or navy left bar and tint fade out
-   after about 2 s (transition 600 ms) and are removed when the row is collapsed.
+1) Tasks "#" column → header "Step", tooltip "Remedy task sequence — tasks with the same step
+   run in parallel". Within the current sort by sequence, show the step number only on the first
+   row of each same-step group; following rows show a faint vertical connector (1px #DDE3EC)
+   instead of the number. When sorted by another column, show the number on every row.
 
-2) Cancelled, bypassed and closed-cancelled tasks: in the Scheduled column, show a grey "—"
-   instead of the amber "No scheduled dates", and no "No dates" tag. These tasks never run.
+2) Remove the "No dates" tag under the task name (the Scheduled column already says "No
+   scheduled dates"). Keep the "Outside window" and "In freeze" tags. Keep "No dates" in the
+   Needs attention count and in the Issue line.
 
-3) Rows in Full change details (Tasks, Work detail and the others): the right-hand description
-   and the pills are centred vertically with the row title (align-items: center; one line).
+3) Work detail rows on ONE line: Added shows "Fri 13 Nov · 18:11 (12 hours ago)" with the
+   bracket part muted (#8592A8). Type, Added and Submitter vertically centred; row padding 10px.
 
-4) The controls bar inside Tasks and inside Work detail is ONE row, centred vertically:
-   - Tasks: left "Show: All · N / Needs attention · N"; right the expand button.
-   - Work detail: left "Showing X of N" + Type chip; right the expand button.
+4) Type filter popover:
+   - "Select all" and "Clear" links at the top, the same as the Pending filters.
+   - max-height 320px with an internal scroll; not clipped by the card (render above, z-index;
+     flip upward if there's no room below).
+   - full type names, never cut off; counts right-aligned.
 
-5) In an expanded task, the problem line becomes a grid row with the label "Issue" and amber
-   text, aligned with Task ID, Type and the rest.
+5) Empty state when the filter matches nothing: centred muted text "No entries match the Type
+   filter · Select all" (link resets the filter). Hide the column headers and the footer hint
+   in that state.
 
-6) Work detail columns: Type minmax(0,1fr); Added 220px; Submitter 260px; the chevron column
-   stays fixed. All cells top-aligned to the first text line, so Type, Added and Submitter
-   line up.
+6) Remove the footer line "The score rates the quality of the change record; it does not predict
+   how the change will go." from the Console report and the saved HTML report. Add the same
+   sentence as the tooltip (title/aria-describedby) on the score ring in the report header.
+   Update any test that checks the footer text.
 
-7) In an expanded entry (task or work detail), hide any label whose value is empty
-   (no "—" rows).
-
-8) Rename the inner buttons to "Expand all tasks" / "Collapse all tasks" and
-   "Expand all entries" / "Collapse all entries". "Expand all" in Full change details stays as
-   it is.
-
-9) Work detail expanded entry: remove the Source and View access rows. Show only Summary (when
-   it differs from the start of the notes), Notes, Attachments.
-
-10) Notes formatting (task notes AND work-detail notes) — display only, never change wording:
-   - keep existing line breaks
-   - lines/runs of 5+ of * - = _ become a thin divider (1px #E6EBF2, 8px margin), not shown as
-     text
-   - insert a line break before list markers at word boundaries: "1." "2)" "Step 3" "•" and
-     " - " at item start
-   - insert a line break before inline labels of the form "Word(s) :" or "Word(s):" (up to 4
-     words, Title Case or ALL CAPS) when preceded by sentence text; render the label semi-bold
-   - URLs: plain text (NOT clickable), small mono font, middle-ellipsis when longer than 60
-     chars, full URL in a tooltip; always wrap
-   - collapse repeated spaces
-   - the 5-line clamp and Show more apply AFTER formatting
-   Do the formatting in one small, pure function with unit tests (examples: run-on text with
-   "Team :" labels, ***** separators, numbered steps, long GitHub URLs, text with no markers
-   stays unchanged). Render as text nodes only — never innerHTML.
-
-Check at 100% and 110% zoom. Run the Review browser tests, the new formatter tests and ruff only.
-Report files changed and counts, then stop. No git.
+Check at 100% and 110% zoom. Run the Review browser tests and ruff only. Report files and
+counts, then stop. No git.
