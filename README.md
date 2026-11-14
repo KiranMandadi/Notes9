@@ -1,27 +1,26 @@
-READ-ONLY measurement — no rule, config or test changes. Use a temporary helper under work/
-and delete it afterwards; no inline Python. Codes and counts only (no change numbers,
-no people's names).
+Re-run the same READ-ONLY measurement with these changes (temporary helper under work/,
+delete it afterwards; no inline Python; no rule/config/test changes; no git):
 
-Proposed CC-05 logic to MEASURE (do not implement):
-- Reference tasks = tasks whose NAME contains "implementation" or "certification"
-  (case-insensitive), status not Cancelled/Canceled/Bypassed (Closed DOES count).
-- If any reference task lacks scheduled start or end → fall back to the change window.
-- If no reference tasks → fall back to the change window.
-- Otherwise: Blocker if any reference task strictly overlaps a freeze period (ET, same
-  boundary logic as today); else if the change window overlaps a freeze → Advisory; else
-  nothing.
-- Exception Work Detail types still suppress, as today.
+A) Reference tasks = name contains "implementation" or "certification" (case-insensitive),
+   EXCLUDING names containing "rollback" or "backout", and names starting with
+   "pre implementation", "pre-implementation", "post implementation", "post-implementation".
+   Status not Cancelled/Canceled/Bypassed (Closed counts).
+B) Use only reference tasks with VALID dates (both present and end > start). Undated or
+   inverted reference tasks are ignored. Fall back to the change window ONLY when no
+   reference task has valid dates.
 
-Run over: (a) the live Pending set, (b) the history replay (all 6,461), and report:
-1) CC-05 hits today (current logic)
-2) under the proposal: Blocker / Advisory / no finding / fallback-to-window — counts
-3) how many current Blockers would become Advisory, and how many NEW Blockers would appear
-   (should be ~0; list the reason category if any)
-4) distinct task NAMES that matched (normalised, with counts) — top 40 — and separately the
-   names containing "post-implementation", "pre-implementation", "recertification", or
-   similar prefixes
-5) distinct task names that did NOT match but look like work (e.g. "deploy", "install",
-   "cutover", "release", "migration") — top 20 with counts, so we can see what we'd miss
-6) how many changes have reference tasks with missing dates (fallback)
+Report the same table (history / live all stages / Scheduled For Approval), plus:
+1) fallback split: no reference task vs. no reference task with valid dates
+2) how many changes have BOTH dated and undated reference tasks (now task-based)
+3) RISK CHECK: changes that become Advisory or no-finding while a NON-reference task in this
+   list overlaps a freeze: names containing "changeman", "redbutton", "load balancing",
+   "poolmember", "auto deployment", "deploy", "tso id upgrade", "cutover", "release".
+   Count, and which of those names.
+4) NEW Blockers (task in freeze, change window not): status breakdown (Planning In Progress /
+   Scheduled For Approval / Scheduled), and how many have the task ENTIRELY outside the
+   change window.
+5) Write the change numbers of the new Blockers and the risk-check changes to
+   work/cc05_review.txt (one per line, with the reason code) so I can check them myself in
+   Remedy. Do NOT print them in the chat. Tell me the file path.
 
-One table for 1–3 and 6, two short lists for 4–5. No git.
+Codes and counts only in the reply.
