@@ -1,31 +1,29 @@
-Final polish — Tasks, Work detail and report footer (0.50.0). UI only.
+Alignment fixes (0.50.0). Items 1–3 were requested earlier and are still visible: please verify
+with a browser screenshot at 100% and 110% zoom before reporting.
 
-1) Tasks "#" column → header "Step", tooltip "Remedy task sequence — tasks with the same step
-   run in parallel". Within the current sort by sequence, show the step number only on the first
-   row of each same-step group; following rows show a faint vertical connector (1px #DDE3EC)
-   instead of the number. When sorted by another column, show the number on every row.
+1) Work detail grid: columns 28px | Type minmax(220px, 1.2fr) | Added minmax(260px, 1fr) |
+   Submitter minmax(200px, 1fr), gap 16px. The header row uses the SAME grid template as the
+   data rows. Every cell (headers and rows): display:flex; align-items:center; min-height 40px;
+   no top margin or padding offsets, so Type, Added and Submitter share one baseline.
 
-2) Remove the "No dates" tag under the task name (the Scheduled column already says "No
-   scheduled dates"). Keep the "Outside window" and "In freeze" tags. Keep "No dates" in the
-   Needs attention count and in the Issue line.
+2) Controls bar inside Tasks and inside Work detail = a single flex row
+   (display:flex; align-items:center; justify-content:space-between; gap 12px):
+   left group (Show segment, or "Showing X of N" + Type chip), right group (Expand button).
+   No separate wrappers with their own margins; the button must not sit higher than the left
+   group.
 
-3) Work detail rows on ONE line: Added shows "Fri 13 Nov · 18:11 (12 hours ago)" with the
-   bracket part muted (#8592A8). Type, Added and Submitter vertically centred; row padding 10px.
+3) Rows in Full change details (all rows, incl. Tasks and Work detail): the title, count chip,
+   pills and right-hand description sit in ONE flex row with align-items:center. The description
+   must not be absolutely positioned or have its own top offset.
 
-4) Type filter popover:
-   - "Select all" and "Clear" links at the top, the same as the Pending filters.
-   - max-height 320px with an internal scroll; not clipped by the card (render above, z-index;
-     flip upward if there's no room below).
-   - full type names, never cut off; counts right-aligned.
+4) Step connector with expanded tasks: the expanded card starts after the Step column (left edge
+   aligned with the Task column), and the connector for a same-step group runs continuously down
+   the Step column alongside any expanded card, until the last task of that step. If the expanded
+   task is the last in its step, the connector ends at that task's row and doesn't continue down
+   the card. No gaps or cut lines when expanding or collapsing.
 
-5) Empty state when the filter matches nothing: centred muted text "No entries match the Type
-   filter · Select all" (link resets the filter). Hide the column headers and the footer hint
-   in that state.
-
-6) Remove the footer line "The score rates the quality of the change record; it does not predict
-   how the change will go." from the Console report and the saved HTML report. Add the same
-   sentence as the tooltip (title/aria-describedby) on the score ring in the report header.
-   Update any test that checks the footer text.
-
-Check at 100% and 110% zoom. Run the Review browser tests and ruff only. Report files and
-counts, then stop. No git.
+Add browser tests that check:
+- these elements share a vertical centre (±2px): the Work detail header cells; the controls bar
+  left and right groups; the Full change details title and description;
+- expand a middle task of a 3-task step: the connector is continuous (no gap > 1px).
+Run the Review browser tests and ruff only. Report files and counts, then stop. No git.
