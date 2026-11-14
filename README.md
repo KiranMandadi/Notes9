@@ -1,52 +1,41 @@
-Alignment and one-line rows (0.50.0). Items 1–3 were requested earlier and are still visible:
-verify with a browser screenshot at 100% and 110% zoom before reporting.
+Tasks fixes + Relationships table (0.50.0). UI only. Verify every item with a browser screenshot
+at 100% and 110% zoom before reporting — items 3 and 4 were requested twice and are still visible.
 
-1) Work detail grid: columns 28px | Type minmax(220px, 1.2fr) | Added minmax(260px, 1fr) |
-   Submitter minmax(200px, 1fr), gap 16px. The header row uses the SAME grid template as the
-   data rows. Cells: min-height 40px, no top margin or padding offsets, so Type, Added and
-   Submitter share one baseline. Type and Submitter: never truncate or use ellipsis — full text,
-   wrapping onto a second line if needed; the other cells stay on the first line's baseline.
+1) Step column — remove the drawn connector line entirely. Instead:
+   - show the step number on every row; when it equals the previous row's step (in sequence
+     order), render it muted #B9C3D3;
+   - no row divider between rows of the same step; keep the 1px divider between different steps;
+   - expanded cards don't change this.
+   When sorted by another column, show all numbers in normal colour with dividers on every row.
 
-2) Controls bar inside Tasks and inside Work detail = a single flex row
-   (display:flex; align-items:center; justify-content:space-between; gap 12px):
-   left group (Show segment, or "Showing X of N" + Type chip), right group (Expand button).
-   No separate wrappers with their own margins; the button must not sit higher than the left
-   group.
+2) Scheduled always on one line: white-space: nowrap for the scheduled text, including the
+   "(10 h 30 min)" part. Columns: 28px | Step 48px | Task minmax(0,1.6fr) |
+   Status minmax(0,1.1fr) | Assigned group minmax(0,1fr) | Scheduled minmax(360px,auto).
+   Task, Status and Group still wrap fully when long (no ellipsis).
 
-3) Rows in Full change details (all rows, incl. Tasks and Work detail): the title, count chip,
-   pills and right-hand description sit in ONE flex row with align-items:center. The description
-   must not be absolutely positioned or have its own top offset.
+3) Rows in Full change details (Tasks, Work detail, Relationships and all others): title, count
+   chip, pills and the right-hand description in ONE flex row, align-items:center. Remove any
+   separate wrapper, absolute positioning or top offset on the description.
 
-4) Step connector with expanded tasks: the expanded card starts after the Step column (left edge
-   aligned with the Task column), and the connector for a same-step group runs continuously down
-   the Step column alongside any expanded card, until the last task of that step. If the expanded
-   task is the last in its step, the connector ends at that task's row and doesn't continue down
-   the card. No gaps or cut lines when expanding or collapsing.
+4) Controls bar in Tasks, Work detail and Relationships: ONE flex row, align-items:center,
+   justify-content:space-between; left group = Show / Showing + filters; right = expand button
+   (Relationships has none). The button must share the vertical centre of the left group.
 
-5) Task rows on ONE line wherever the text fits (same grid approach as Work detail;
-   min-height 40px):
-   - Status: "Staged (Staging in Progress)" — the bracket part muted #8592A8; no second line.
-     Cancelled: "Closed (Cancelled)", greyed as now.
-   - Scheduled: multi-day "Mon 16 Nov 20:30 → Tue 17 Nov 07:00 (10 h 30 min)"; same day
-     "Mon 16 Nov · 20:30–23:00 (2 h 30 min)"; duration in brackets muted. Remove the relative
-     hints ("in 2 days", "started", "date has passed"). "No scheduled dates" (amber) and "—"
-     (cancelled) unchanged.
-   - Tags "Outside window" / "In freeze" (and the tech-only counted tags) sit inline after the
-     task name, same line.
-   - Long task names, groups and statuses: never truncate or use ellipsis — show the full text
-     and let it wrap onto a second line when needed (overflow-wrap: anywhere). Cells in that row
-     align to the first line (align-items: start with matching padding), so short cells stay on
-     the first line's baseline.
-   - Columns: 28px | Step 48px | Task minmax(0,2fr) | Status minmax(0,1.2fr) |
-     Assigned group minmax(0,1.2fr) | Scheduled minmax(300px,1.4fr).
+5) Relationships as a table:
+   - Keep "Affected services" at the top as now.
+   - Controls bar: "Showing X of N" + filter chips "Relationship All ▾" and "Request type All ▾"
+     — same component as the Work detail Type filter (multi-select checkboxes, counts,
+     Select all / Clear, max-height 320 with scroll, never clipped, teal outline when active).
+   - Table grid (header row uses the same template): Relationship minmax(120px,0.8fr) |
+     Request type minmax(150px,0.9fr) | Request summary minmax(0,3fr) | Status
+     minmax(100px,0.6fr). Header cells and data cells share one baseline; summary wraps fully,
+     other cells stay on the first line; row dividers 1px #EEF1F6; row padding 10px.
+   - Sortable: Relationship, Request type, Status (click toggles ▲/▼, same style as other
+     tables; ties keep Remedy order). Default order = Remedy order.
+   - Empty state when filters match nothing: "No relationships match the filters · Select all".
+   - Text only (no links), as today.
 
-Add browser tests that check:
-- these elements share a vertical centre (±2px): the Work detail header cells; the controls bar
-  left and right groups; the Full change details title and description;
-- expand a middle task of a 3-task step: the connector is continuous (no gap > 1px);
-- a task row with short text is a single line (row height ≤ 44px); a task with a very long
-  name wraps fully with no ellipsis, and the other cells stay on the first line's baseline;
-- the scheduled text has no relative hint;
-- no element in the Tasks or Work detail tables uses text-overflow: ellipsis.
-Update the date-format tests for the new task format. Run the Review browser tests and ruff only.
-Report files and counts, then stop. No git.
+Browser tests: the same-step rows have a muted number and no divider; scheduled text is one line
+at 1280px and 1496px widths; the alignment checks (±2px) for items 3 and 4; the Relationships
+filters (multi-select, Select all/Clear, counts), sorting and empty state. Run the Review browser
+tests and ruff only. Report files and counts, then stop. No git.
