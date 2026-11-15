@@ -1,20 +1,15 @@
-Guide polish, last two (Pending miniature). UI only.
-1) Filter rows: label column fixed width; chips wrap within the chip column, so the wrapped
-   "Approver A. Approver" chip starts under "Status Scheduled For Approval", not under "SCOPE".
-2) Status message: the left accent is a straight 3px bar inside the tinted fill (e.g.
-   box-shadow: inset 3px 0 0 <green> or a ::before), not a border that curves with the radius.
-   Match the real Pending page's message exactly.
-Run the Guide browser tests and ruff only. Report files and counts; then stop. No git.
+Guide polish: parts lists in sections 01 and 03 (UI only).
+1) Each row: padding 12px 0, border-bottom 1px solid #E6EBF2; no border on the last row.
+   Row height consistent whether open or closed.
+2) Active row: remove the outlined box. Full-width row background #F1F8F6 (no border,
+   no radius beyond 6px), number filled navy as now, description below the title inside
+   the same row. Hover on other rows: background #F7F9FC.
+3) Same component for both lists.
+Check at 100% and 110%. Run the Guide browser tests and ruff only. Report files and counts;
+then stop. No git.
 
-git status
-git diff --stat
+
 git add -A
 git status
-git commit -m "0.51.0: Guide page" -m "- New Guide tab (flag CHANGELENS_GUIDE, on by default): parts of the report, scoring
-  simulator (weights and thresholds from config), the Pending page, FAQ, glossary, data handling
-- Report and Pending miniatures match the real pages: heading-and-row cards, filter chips with
-  values, green status message; numbered hotspots linked to the parts list, with a divider
-- Static page: no Remedy calls; neutral professional copy
-- crq doctor shows Guide on/off; docs, SECURITY.md, CHANGELOG and tests updated
-- Rule set id unchanged"
+git commit -m "Guide: row dividers in parts lists"
 git push
