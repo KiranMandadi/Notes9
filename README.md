@@ -1,18 +1,11 @@
-Exec Summary fix: build. Approved: your points 1-6, with point 4 applied to BOTH labels and
-the new fallback heading (only inside the Exec Summary block: after the "Exec Summary"
-heading and before the first Notes-template question / "DO NOT REMOVE" block).
-Rules: Q-COMPLETE-10/-12 Major only when a question is truly missing or has no answer;
-Q-COMPLETE-11 advisory names the question numbers; evidence and highlights one per
-reworded question, in question order, each labelled "Question n". Neutral wording.
-Usual constraints (no config.py/.env, no Remedy writes, no git, no inline Python, no
---update-baseline; codes/counts only in chat).
-Tests: shortened Q2 ("How will production impact be controlled?") found and answered;
-stray "Production impact:" / "Change:" line outside the block ignored; missing vs
-unanswered messages; several reworded questions -> one advisory naming all, highlights
-in order; existing tests stay green.
-Docs and CHANGELOG 0.52.1; pyproject 0.52.1.
-Verify: ruff, full tests, check.py --browser --audit (report new rule set id).
-Measure with the built code on the same scope: Majors cleared / added, advisories
-before -> after. Write work/execsummary_spotcheck.txt with every cleared Major and 10
-cleared advisories (question number, heading as written, answer length). Delete
-work/execsummary_review.txt. Then stop.
+Read-only measurement; usual constraints. Same scope as the window check (profile groups,
+2026-08-17 to 2026-12-15, Cancelled/Rejected skipped). Rule: the change-window length
+check (> 8 h, Minor).
+1) Current hits by Type of Window (Authorized / Specialized / blank), by class, and for
+   Specialized by Platform x window. Length buckets: 8-12 h, 12-24 h, 1-3 days, > 3 days.
+2) How many hits are on Specialized windows that are 24x7 or whose allowed hours span
+   more than 24 h continuously (e.g. SPR, Control-M standalone SPR, DR Exercise).
+3) For Authorized hits: how many have implementation tasks that all pass CC-10 (i.e. the
+   work itself is inside the allowed hours and only the change window is long).
+4) Where the rule is defined (rule id, config value) and whether any doc gives a source
+   for 8 h. Codes and counts only; script under work/, deleted after. Then stop.
