@@ -1,24 +1,17 @@
-Window fields discovery. Read-only. No code, config, rule or history-schema changes.
-Do not read cr_core/config.py, cr_core/history/config.py or .env. No writes to Remedy.
+Window discovery, part 2. Read-only. Same constraints as before (no config.py/.env, no
+Remedy writes, no repo changes, scripts under work/ deleted after, codes/counts/values only).
 
-1) Field map: check remedy_field_map.yaml for these Change (Date/System tab, "Window
-   Exception" section) fields: Approved Implementation Window, Type of Window, Platform,
-   Specialized Windows, Timing Reason. Report which exist (field ids) and which are missing.
-   For missing ones, find the field ids read-only from the form metadata via the existing
-   client, without adding them to the map.
-
-2) History: report whether history.db holds any of these fields. If yes, count by value over
-   all history: Type of Window; Platform; Platform x Specialized Windows; Approved
-   Implementation Window; Timing Reason. Also count blanks.
-
-3) Live (if history lacks them): read-only query of changes with Scheduled Start in the last
-   90 days and next 30 days, production and non-production, all classes. Same counts as (2),
-   split by class (Normal / Expedited / Standard / Emergency) and by Status group
-   (not started / in progress / closed).
-
-4) List the full menu values Remedy offers for Platform, Specialized Windows (per Platform if
-   dependent), Approved Implementation Window and Timing Reason.
-
-Output in chat: field ids, menu values and counts only. No change numbers, names or
-summaries. Put any per-change working list in work/windows_discovery.txt and delete it
-when done. Scripts go in a file under work/, no inline Python; delete after. Then stop.
+1) SCHW:CHG:TemplatizeFields: describe the row structure for Specialized Windows entries
+   (field names/ids for platform, window name, status, per-weekday start/end, time zone,
+   any notes/effective dates). Show the full rows for the 36 Platform x Specialized
+   Windows pairs used in the discovery, as a table: platform, window, Mon..Sun start-end,
+   time zone. Flag rows whose end is earlier than start (overnight) and any "24x7"/blank.
+   Also check whether an "Authorized" definition exists on this form or elsewhere.
+2) Window exception fields: Window Exception (800000980), ztmp_WindowExceptionFlag
+   (800000986), ztmp_WindowExceptionCount (800001516), ztmp_WindowExceptionWorkLogCount
+   (800001518): type, menu values, and counts by value over the same 4,867 changes, split
+   by Type of Window. Also count Work Detail entries of types Restriction Approval Notes /
+   Restriction Exception on those changes, and how they line up with these fields.
+3) Report how the Remedy form itself uses these (any active links/filters visible via
+   metadata that set the exception flag), only if readable without admin rights.
+Then stop.
