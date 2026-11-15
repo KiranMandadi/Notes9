@@ -1,5 +1,6 @@
-Read-only. For Platform = Distributed, show the Active SCHW:CHG:TemplatizeFields rows for:
-CESAerospikeSupport; PA Support Activities for IMW; Disaster Recovery Exercise;
-Transaction Posting System; Batch Processing (non-scheduler and non-spr changes).
-Table: window, Sun..Sat ST1-ET1 / ST2-ET2. No change data. Script under work/, deleted
-after. Then stop.
+Read-only measurement, same 4,881 changes and constraints as before. Certification tasks
+(name contains "certification", same status/valid-date/stale rules): count changes where a
+certification task has restricted minutes (authorized hours as in window_check, plus the
+change's Specialized window). Split by: starts before the last implementation task ends;
+restricted minutes <=60, 61-240, >240; Authorized vs Specialized; no implementation task
+at all. Codes and counts only. Script under work/, deleted after. Then stop.
