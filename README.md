@@ -1,32 +1,20 @@
-Guide polish (0.51.0). UI only.
+Guide polish, last two (Pending miniature). UI only.
+1) Filter rows: label column fixed width; chips wrap within the chip column, so the wrapped
+   "Approver A. Approver" chip starts under "Status Scheduled For Approval", not under "SCOPE".
+2) Status message: the left accent is a straight 3px bar inside the tinted fill (e.g.
+   box-shadow: inset 3px 0 0 <green> or a ::before), not a border that curves with the radius.
+   Match the real Pending page's message exactly.
+Run the Guide browser tests and ruff only. Report files and counts; then stop. No git.
 
-1) Pending miniature: eyebrow "CHANGES" (not "PENDING APPROVAL"), matching the real page.
-
-2) Pending miniature realism: chips show values like the real page — RISK: "ORR 4 – Very High,
-   3 – High", "Risk Level 5, 4, 3", "Impact All", "Quality All"; SCOPE: "Status Scheduled For
-   Approval", "Class All except Standard", "Date Any", "Group All", "Approver A. Approver";
-   active ones with the teal outline. Replace "2 changes loaded" with the real green status
-   message style "✓ Updated 09:24 · 2 changes". Keep hotspot positions on the right elements.
-
-3) Glossary: lay out as rows of two (grid with aligned rows: ORR | Risk Level, Freeze |
-   Advisory, Stale task | Step) so each pair shares a top edge.
-
-4) Data handling tiles: identical internal layout — icon, title and text top-aligned
-   (align-items: start), same padding; icons and titles on one line across all four tiles.
-
-5) Report miniature: give "Compared with past changes" and "Full change details" the same
-   layout as the Issues card — white card, bold heading row, then one row per item (gap 7px):
-   - Past changes: heading "Past changes · 42 similar"; rows with a neutral grey pill label
-     (same pill size as Major/Minor, min-width so labels align) + text:
-     Start | Usually 21:00 · Window | 2× the usual length · Approvals | About 3 days
-   - Full change details: heading "Full change details"; rows "› Summary and notes",
-     "› Tasks  6", "› Work detail  4", "› Relationships  2" (chevron and count muted).
-   Re-place the hotspot numbers so each sits on the top-left of its block (Verdict, Issues,
-   Past changes, Full change details on the left; At a glance on the right; Score on the ring).
-
-6) Sections 01 and 03: the numbered list on the right has a visible vertical divider from
-   the miniature — border-left 1px solid #DDE3EC, padding-left 22px, running the full height
-   of the section content (align-self: stretch). Same on both sections.
-
-Check at 100% and 110%. Run the Guide browser tests and ruff only. Report files and counts;
-then stop. No git.
+git status
+git diff --stat
+git add -A
+git status
+git commit -m "0.51.0: Guide page" -m "- New Guide tab (flag CHANGELENS_GUIDE, on by default): parts of the report, scoring
+  simulator (weights and thresholds from config), the Pending page, FAQ, glossary, data handling
+- Report and Pending miniatures match the real pages: heading-and-row cards, filter chips with
+  values, green status message; numbered hotspots linked to the parts list, with a divider
+- Static page: no Remedy calls; neutral professional copy
+- crq doctor shows Guide on/off; docs, SECURITY.md, CHANGELOG and tests updated
+- Rule set id unchanged"
+git push
