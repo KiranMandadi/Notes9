@@ -1,20 +1,15 @@
-History database restored by me (crq doctor shows 6,461). Baseline: keep the comment-only
-fix in quality_rules.yaml; I will run --update-baseline myself. The rule set id must stay
-a281f7da.
-Continue the cleanup proof: identical history findings (17,661, 0 differences), identical
-live scores and verdicts, tests, audit. Report results; then stop.
-Also add to .github/copilot-instructions.md: "Never delete anything under work/history/
-(the history database). Cleanups of work/ skip that folder."
-
-
+python scripts/check.py --update-baseline
+python scripts/check.py --browser --audit
 git status
 git diff --stat
 git add -A
 git status
-git commit -m "0.52.2: cleanup, no behaviour change" -m "- Removed unused builtins, options, shapes, CSS classes and test constants
-- Docs brought in line with 0.52.1: rule counts, MF-05/CC-08 references, upgrade notes,
-  rules-authoring example, open items
-- Guide sample report uses a current finding
-- work/ emptied
-- Rule set a281f7da unchanged; findings, scores and verdicts identical"
+git commit -m "0.52.2: cleanup, no behaviour change" -m "- Removed unused code: text_suggests_database builtin, starts_in option, two unused
+  shapes, four unused CSS classes, OVERLAPS_CELL
+- Stale comment in quality_rules.yaml corrected (baseline updated; rule set unchanged)
+- Docs brought in line with 0.52.1: rule and pack counts, MF-05/CC-08 references, upgrade
+  notes, rules-authoring example, open item D27
+- Guide sample report uses a current finding (release name)
+- Copilot instructions: never delete work/history/
+- Rule set a281f7da unchanged; history findings, live scores and verdicts identical"
 git push
