@@ -1,27 +1,35 @@
-python scripts/check.py --update-baseline
-python scripts/check.py --browser --audit
+Cleanup inventory (read-only). No code, config, doc or test changes in this step.
+Constraints: never read/search/print cr_core/config.py, cr_core/history/config.py or .env;
+no Remedy writes; no crq login; no git; no inline Python — scripts in a file under work/,
+deleted after; chat shows codes, counts and file paths only — no change numbers or names.
 
+Goal: find leftovers from 0.48–0.52.1 so the repo is clean, accurate and consistent,
+WITHOUT changing any behaviour. List candidates only.
 
-git status
-git diff --stat
-git add -A
-git status
-git commit -m "0.52.1: accuracy fixes across window, Exec Summary, CI, template, wording and release rules" -m "- Exec Summary: shortened question 2 recognised; fallback heading match only inside the
-  block; missing vs unanswered named; one labelled highlight per question
-- CC-06 window length: advisory (0 points); skipped when the window check passes, on
-  24x7/multi-day Specialized windows, with a recorded exception or a stated reason
-- CV-13: one header line, one line and one View task link per stale task
-- INF-01: passes when Remedy relates a CI in use (not Disposed/Delete); INF-08 (new
-  advisory): related CIs no longer in use
-- INF-05: certificate only from 'certificate renewal'/'ssl certificate'; advisory on Patch
-- CC-04: reads Remedy's Template+ field; SCT text search removed; Template in At a glance
-- Verdict line names a freeze clash only with a CC-05 finding; rule panel has no Owner row
-- CV-08 not applied to Standard changes
-- No impact (Q-VAGUE-01/03): more stated reasons recognised; bare 'No impact' still flagged
-- Vague 'etc' (Q-VAGUE-02): template's own bracketed wording ignored
-- Release name (GEN-01): application deployments and releases only, incl. PCF/Harness/
-  Blue-Green/artifact/build/promotion/version wording
-- Task links: unique labels when parallel tasks share a step ('View task 1 - 2 of 9')
-- Unchanged by decision: MF-01/MF-02, open-task scheduled dates, Exec Summary scope
-- Rule set d1a893eb -> a281f7da; baseline, docs, CHANGELOG and tests updated"
-git push
+1) Dead or obsolete code: functions, classes, builtins, JS/CSS, templates, routes and
+   flags no longer called or reachable — especially remnants of retired MF-05, CC-07,
+   CC-08, the old calendar periods (mf-online, mf-batch-critical, business-hours, weekend
+   max_risk), the CC-04 SCT text search, the rule "owner" field/row, the old loading pill,
+   the old CC-06 Minor path. Show evidence (no callers / no references).
+2) Config and rule packs: keys nobody reads, unused shapes/patterns (e.g.
+   standard_template_number if truly unused), the unused rule-pack "question:" field,
+   stale comments ("to be confirmed", "Change Management office"). Note which items would
+   change the rule set id if touched (those are OUT of scope for cleanup).
+3) Docs: every doc vs current behaviour — rule catalogue, user-guide, configuration,
+   operations, architecture, contracts, SECURITY.md, open-items (D21/D24 etc.), README,
+   .env.example, copilot-instructions, Guide page text. List statements that are wrong or
+   outdated (retired rules still described, old thresholds like "8 h Minor", old counts,
+   old versions, duplicated or contradictory sections, broken links/anchors).
+4) Tests: obsolete or duplicated tests, misleading names (e.g. the "fallback" test names),
+   skipped tests with no reason, fixtures nobody uses. Never propose weakening a test.
+5) Code quality: unused imports/variables, commented-out code, TODOs that are done,
+   inconsistent naming, ruff/lint warnings currently suppressed without reason.
+6) Repo hygiene: stray files (work/ leftovers, scratch scripts, old outputs), .gitignore
+   gaps, files that should never be committed.
+
+For each candidate: id, file(s), what, evidence, proposed action (delete / rewrite doc /
+rename / leave), risk (none / low / changes behaviour), and whether it would change the
+rule set id. Anything that changes behaviour or the rule set id goes in a separate
+"NOT cleanup — needs a decision" list.
+Write the full list to work/cleanup_inventory.md; in chat give counts per section and the
+"needs a decision" list. Then stop.
