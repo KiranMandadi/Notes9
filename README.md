@@ -1,36 +1,55 @@
-0.52.1 additions (same release; baseline still NOT updated). Usual constraints (no
-config.py/.env, no Remedy writes, no crq login, no git, no inline Python, no
---update-baseline; codes/counts only — no change numbers, host names or note text).
-Keep work/execsummary_spotcheck.txt.
+0.52.1 additions (same release; baseline still NOT updated).
+Constraints unchanged: never read/search/print cr_core/config.py, cr_core/history/config.py
+or .env; no Remedy writes; no crq login; no git; no inline Python (-c/stdin/heredoc) —
+scripts in a file under work/, deleted after; do NOT run --update-baseline; history.db
+schema unchanged, no people stored; chat shows codes and counts only — no change numbers,
+names or note text. Keep work/execsummary_spotcheck.txt.
 
-A) INF-01 (hosts/CIs named)
-   - Pass when Remedy relates at least one Configuration Item whose status is not
-     Disposed or Delete (End of Life counts as related). Any relationship type.
-   - Only when no such CI is related, keep the current text check (host/server words,
-     host-name shape) in Summary and Notes.
-   - When it still fires, never list CIs. Message: "No usable Configuration Item is
-     related to the change, and the Summary and Notes name no host or server."
+A) CC-04 (Standard change uses an approved template)
+   - Source of truth: the Change form's "Template+" field (the template name, e.g.
+     "Control-M: New Connection Profiles"). Find its field id read-only, add it to
+     remedy_field_map.yaml, read it live with the change.
+   - Pass when Template+ is non-empty. Major when a Standard change has Template+ empty.
+   - Remove the SCT-number search in Summary/Notes/Relationships entirely. Message:
+     "Standard change has no template selected (Template+ is empty)."
+   - History replay without the field -> rule not applicable (no finding).
+   - Show the template name in At a glance (Change section, row "Template").
 
-B) New advisory (0 points), e.g. INF-11 (next free id): "<n> related CIs are no longer
-   in use (Disposed/Delete)." List them under Technical details only. Statuses come from
-   relationships.status (already read). End of Life is not flagged.
+B) Platform detection: use the Template+ name as one more input to classify(), alongside
+   the categorization and text (e.g. "Control-M: ..." -> Control-M). Measure how many
+   changes move from "Not identified" to a platform and which rules newly apply. If this
+   adds any Major, list rule ids and counts and keep B out of the build until I confirm.
 
-C) INF-05 (certificate expiry, chain, endpoints)
-   - Certificate sub-type only from the phrases "certificate renewal" or "ssl certificate";
-     single words (certificate, cert, ssl, tls, csr) no longer set it on their own.
-   - When operational categorization tier 1 is Patch, INF-05 is an advisory (0 points)
-     instead of a Major. Elsewhere it stays Major.
+C) Verdict line "freeze clash, exception recorded": explain where this text comes from and
+   when it is shown. It appears on unrelated changes, so check whether it is shown without
+   a CC-05 freeze finding plus a recorded exception on that change. If so, show it only
+   when both are true. Report counts before/after.
 
-TESTS: INF-01 passes with one Deployed CI and with one End of Life CI; fires (new message,
-no CI list) with only Disposed/Delete CIs and no host words; text check still used when no
-CI is related. INF-11: Disposed + Delete counted, End of Life ignored, 0 points.
-INF-05: single word "tls" -> no certificate sub-type; phrase on Patch change -> advisory;
-phrase on non-Patch change -> Major. Existing tests stay green.
+D) Rule detail panel on the Review page: remove the "Owner" row, as already done on the
+   Rules page.
 
-DOCS: infrastructure rules doc / regenerated catalogue, user-guide if relevant,
-CHANGELOG 0.52.1 (add to the existing entry). Version stays 0.52.1.
-VERIFY: ruff; full suite; check.py --browser --audit (report the new rule set id).
-MEASURE (built code, same live scope): INF-01 Majors before -> after; INF-11 advisories
-(changes); INF-05 Majors -> advisories / removed; verdict changes caused by A-C (to Ready,
-Blocked -> Needs work, any worse). Add 10 INF-01 cleared cases and 5 INF-05 cases to
-work/execsummary_spotcheck.txt (rule id, CI count, statuses, categorization tier 1). Then stop.
+E) Measure only, no change: CV-08 (missing Work Detail types) on Standard changes — number
+   of changes, and the missing types ranked by count.
+
+TESTS
+   - CC-04: passes with Template+ filled and no SCT text; fires with Template+ empty even
+     when the text mentions an SCT number; history without the field -> no finding.
+   - Platform detected from the template name.
+   - Verdict line shown only with a freeze finding plus a recorded exception.
+   - Rule panel has no Owner row.
+   - Existing tests stay green; do not weaken any.
+
+DOCS: rules docs / regenerated catalogue, user-guide if relevant, CHANGELOG 0.52.1 (add to
+the existing entry). Version stays 0.52.1.
+
+VERIFY: ruff; full test suite; scripts/check.py --browser --audit (0 mismatches apart from
+the expected baseline step; report the new rule set id).
+
+MEASURE (built code, same live scope: profile groups, Scheduled Start 2026-08-17 to
+2026-12-15, Cancelled/Rejected skipped):
+   - CC-04 Majors before -> after; Standard changes with Template+ empty.
+   - Verdict changes caused by this round (to Ready, Blocked -> Needs work, any worse).
+   - B, C and E counts as above.
+   - Add 10 cleared CC-04 cases to work/execsummary_spotcheck.txt (rule, class, template
+     present yes/no).
+Report files changed, test counts, audit result, rule set id and the measurement; then stop.
