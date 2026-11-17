@@ -1,59 +1,48 @@
-Impact check: discovery and measurement only. READ-ONLY: no code, config, rule, doc,
+Change Assessment completeness: measurement only. READ-ONLY: no code, config, rule, doc,
 baseline or history-schema changes; no git.
 Constraints: never read/search/print cr_core/config.py, cr_core/history/config.py or .env;
-no Remedy writes; no crq login; no inline Python (-c/stdin/heredoc) — scripts in a file
-under work/, deleted after; never touch work/history/; chat shows codes, counts, question
-headings and normalised phrases only — no change numbers, names or note text.
+no Remedy writes; no crq login; no inline Python — scripts in a file under work/, deleted
+after; never touch work/history/; delete work/impact_review.txt now (it holds names);
+chat shows codes, counts, group names and normalised headings only — no change numbers,
+people's names or note text.
 
-Goal: see whether the Change Assessment (Work Detail) can show when the stated Impact is
-lower than the assessment suggests. Draft model below; measure only.
+Standard (CES CAB, 13 Nov 2026): Work Detail type "Change Assessment" with
+ 1 Justification · 2 Deployment Strategy · 3 Deployment Type · 4 Rollback or Backout
+ Type and ETA · 5 User Restoration ETA · 6 Business Impact · 7 Rollback or Backout Plan
+ Attestation · 8 Can this change be rescheduled (3 to 5 days) - Y/N · 9 Justification
+ (if N to #8).
 
-1) Find the Change Assessment
-   - Work Detail type name(s) used; counts per scope (live: profile groups, Scheduled Start
-     2026-08-17 to 2026-12-15, Cancelled/Rejected skipped; history: 6,461 past changes if
-     their Work Detail can be read live without excessive calls — report the call cost
-     first; if over ~2,000 reads, use a random sample of 1,000 and say so).
-   - Is it Public or Internal (Internal notes are stripped today — say if that blocks it)?
-   - Question headings found (normalised) and % of entries containing each; confirm the
-     numbering (2 Deployment Strategy, 3 Deployment Type, 4 Roll Back (Backout) Type and
-     ETA, 5 User Restoration ETA, 6 Business Impact (worst case scenario)); variants.
-   - Multiple assessments per change: how often; use the latest.
+Scope: live (profile groups, Scheduled Start 2026-08-17 to 2026-12-15, Cancelled/Rejected
+skipped). Split every count by: CES groups vs other groups (say how CES is identified —
+group name prefix or another field — and list the groups counted as CES); class; status
+group (awaiting approval / scheduled / closed); submitted before vs on/after 2026-11-13.
+Use the latest Change Assessment per change.
 
-2) Parse (in the helper only)
-   - Q4 and Q5 time: minutes from forms like "< 10 mins", "15 min", "1 hr", "2 hours",
-     "30-45 mins" (take the upper bound); "N/A", "none", "not possible", "forward fix",
-     blank -> category. Report % parsed, and the 30 most common unparsed values (normalised).
-   - Restoration bucket = longer of Q4 and Q5: <=15 min / <=1 h / <=4 h / >4 h-none-unknown.
-   - Q2 (+Q3) strategy terms: counts of normalised values; flag "big bang", "no rollback",
-     "forward fix", "all at once"; note blue/green, canary, phased, configuration change.
-   - Q6 reach (with negation handling — "no impact to clients" is NOT client reach):
-     A none/technical only; B one internal team/tool; C broad internal users or one
-     external function (consumer, client-facing feature named); D clients/customers/
-     consumers broadly or trading/money movement ("all clients", "trading", "any customer").
-     Report counts per reach, % unclassified, and the 30 most common phrases per reach.
+Simulated checks (helper only):
+ CA-a No Change Assessment Work Detail.
+ CA-b Each of the 9 questions missing (match by number + key words, tolerant of the
+      variants already seen: "roll back", "rollback eta", "restoration time", "impact
+      (worst case scenario)", "attestation or validation sign-off", etc.).
+ CA-c Question present but unanswered: blank, "N/A", "NA", "none", "-", "TBD",
+      "[todo...]" placeholders, or only the next heading.
+ CA-d Q4 or Q5 has no readable time (use the earlier parser incl. number words, "> N",
+      "N+", "same as deployment"; "rollback not required (SPR / new deployment)" counts
+      as answered for Q4).
+ CA-e Q8 not a clear Y/N; CA-f Q8 = N and Q9 missing/unanswered.
+ CA-g Q7 present but empty (presence only; never read or print attestation text).
 
-3) Draft grid (derived Impact; 1 Extensive … 4 Minor)
-   D: <=15m 2 | <=1h 1 | <=4h 1 | >4h 1
-   C: <=15m 3 | <=1h 3 | <=4h 2 | >4h 2
-   B: <=15m 4 | <=1h 4 | <=4h 3 | >4h 3
-   A: 4 everywhere
-   Strategy "big bang"/"no rollback"/"forward fix only" raises one level (max 1).
-   Not derived when Q6 is unclassified or Q4/Q5 both missing (count these).
-
-4) Compare with the stated Impact (Remedy Impact field)
-   - Matrix stated x derived (counts), live and history separately.
-   - Understated by 1 level and by 2+ levels: counts, by class, ORR and coordinator group
-     (group names allowed; no people).
-   - Overstated: count only.
-
-5) Evidence for leadership (history)
-   - Incident rate after the change (as used by the history comparison) for: derived =
-     stated, understated by 1, understated by 2+. Counts and rates with sample sizes.
-
-6) Review file (for me only): work/impact_review.txt with 30 changes — 15 understated
-   (mix of 1 and 2+ levels), 10 equal, 5 not derived — each: change id, stated Impact,
-   derived Impact, reach + matched phrase, restoration bucket + parsed minutes, strategy
-   flag, and Q2/Q4/Q5/Q6 text (<=200 chars each). Do not print it in chat.
-
-Report the numbers, what blocks or weakens the model, and suggested grid or phrase
-adjustments. Then stop.
+Report:
+ 1) Counts per check, with the splits above; how many changes would get 0 / 1 / 2+
+    findings; and which question is missed most.
+ 2) Answer-quality signals: top 15 normalised "unanswered" values; how Q8 is written
+    (Y/N/Yes/No/other) with counts.
+ 3) Matching risk: headings that look like a question but didn't match (top 20,
+    normalised), and any case where one heading matched two questions.
+ 4) Incidents within 7 days (history, read live as before) for: complete assessment,
+    1-2 questions missing, 3+ missing, no assessment — counts and rates.
+ 5) Spot-check: work/ca_review.txt with 20 changes (8 complete, 8 with gaps of different
+    kinds, 4 with no assessment): change id, group, class, status, each question
+    found/missing/unanswered, Q8 value — NO answer text and NO attestation text.
+    Do not print it.
+ 6) Recommend severity per check and whether CES-only or all groups, with reasoning.
+Then stop.
