@@ -1,45 +1,40 @@
-Change Assessment completeness: build. Constraints unchanged: never read/search/print
-cr_core/config.py, cr_core/history/config.py or .env; no Remedy writes; no crq login; no
-git; no inline Python; do NOT run --update-baseline; never touch work/history/; delete
-work/ca_review.txt now; chat shows codes and counts only.
+0.53.0 additions before commit (baseline still NOT updated).
+Constraints unchanged: never read/search/print cr_core/config.py, cr_core/history/config.py
+or .env; no Remedy writes; no crq login; no git; no inline Python — scripts in a file under
+work/, deleted after; do NOT run --update-baseline; never touch work/history/; no answer or
+attestation text in findings, logs or chat; chat shows codes and counts only.
 
-Standard (CES CAB, 13 Nov 2026), Work Detail type "Change Assessment", latest entry:
- 1 Justification · 2 Deployment Strategy · 3 Deployment Type · 4 Roll Back (Backout) Type
- and ETA · 5 User Restoration ETA · 6 Business Impact (worst case scenario) ·
- 7 Rollback/Backout Plan Attestation or Validation Sign-Off · 8 Can this be deferred 3 to
- 5 days? (Y/N) · 9 Justification on why the change cannot be deferred.
-Use the heading matching and variants from the measurement (number + key words; the
-disambiguation rules for Q4/Q7 and Q1/Q8/Q9; "(Y/N)" prefix stripped).
+A) Evidence link
+   - CV-15 and CV-17 show "Searched: Work detail › Change Assessment" as a link. Click:
+     open Full change details, expand Work detail, expand the latest Change Assessment
+     entry, scroll to it, brief highlight (same style as the Notes highlight).
+   - CV-14: link "Searched: Work detail" opens the Work detail panel.
+   - Internal entry: the link still lands on it ("Internal: text not shown").
 
-Config (new block, e.g. change_assessment in quality_rules.yaml or a profile config file):
- work_detail_type, the 9 questions with variants, unanswered values (blank, na, n/a,
- none, not applicable, tbd, line of dashes, [todo...]), excluded classes [Standard,
- Latent, Emergency], organisations in scope (the 9 "CES - ..." organisations).
+B) How to fix (neutral, no "your"; names the questions itself, never "above"; no mention
+   of template versions or formats):
+   - missing: "Add question 5 (User Restoration ETA) and question 8 (Can this be
+     deferred 3 to 5 days? Y/N) to the Change Assessment Work Detail, and answer each."
+   - unanswered: "Answer question 2 (Deployment Strategy)."  (combine both when needed)
+   - Q8 = N without Q9: "Explain in question 9 why the change cannot be deferred."
+   - CV-14: "Add a Change Assessment Work Detail with questions 1–9."
 
-Rules (next free ids; neutral wording, no "your"):
- R1 Major — no Change Assessment Work Detail.
- R2 Major — one combined finding listing every gap: questions missing; questions present
-    but unanswered; Q7 empty; Q8 = N with Q9 missing/unanswered. Q9 is NOT required and
-    "N/A" is valid when Q8 = Y. Q7 counts as answered with either an attestation or a
-    "testing not possible … why" statement — presence only, never quote or store Q7 text.
-    Message: "Change Assessment incomplete: questions 5, 7 and 8 are missing; question 2
-    is unanswered." (names in Technical details, e.g. "5 User Restoration ETA").
- R3 Minor — Q8 present but not a clear Y/N.
- R4 Advisory — Q4 or Q5 answered but with no readable time.
- Same lifecycle as the Exec Summary rule: Major/Minor while awaiting approval; advisory
- once Scheduled/Closed. Excluded classes and out-of-scope organisations: not applicable.
- History replay: not applicable when the assessment isn't stored (no findings).
- Internal entries: read in memory for the rule; the report says the entry is Internal and
- never shows its text. No answer text in findings or logs.
+C) Bold headings
+   - In Change Assessment entries, render each identified question heading (as written,
+     e.g. "4.Roll Back ETA:") bold on its own line, unbroken; answer text below, normal.
+   - Notes formatter everywhere: a label is the whole phrase from line start (after an
+     optional list number) up to the colon, max 6 words; never split a phrase to bold
+     only the last word. Times like "05:03" and URLs are not labels.
 
-TESTS: complete assessment passes; no assessment -> R1; missing + unanswered -> one R2
-listing both; Q8=Y with Q9 N/A or absent passes; Q8=N with Q9 blank -> R2; Q7 "testing
-not possible because…" passes; Q7 empty -> R2; Q8 "maybe" -> R3; Q4 "quick" -> R4;
-Standard/Latent/Emergency -> none; Scheduled -> advisory; heading variants from the
-measurement; no answer text in output. Existing tests stay green.
-DOCS: rule catalogue, user-guide, configuration, CHANGELOG 0.53.0, pyproject 0.53.0;
-Guide page glossary one line "Change Assessment".
-VERIFY: ruff, full suite, check.py --browser --audit (report rule set id).
-MEASURE (built code, live scope): R1-R4 counts by status group and class; verdict
-changes (to Needs work / Blocked); work/ca_spotcheck.txt with 15 changes (5 R1, 7 R2,
-3 complete) — change id, class, status, findings, question numbers only, no text. Then stop.
+D) Checklist line (Technical details only): at the top of the latest Change Assessment
+   entry, "1 ✓ 2 ✓ 3 ✓ 4 ✓ 5 ✗ 6 ✓ 7 ✓ 8 ✗ 9 –" (✗ missing, ○ unanswered, – not needed);
+   tooltip names each question. Muted, one line.
+
+TESTS: link opens and highlights the entry (CV-15, CV-17) and opens Work detail (CV-14);
+fix text for missing / unanswered / Q9 / CV-14, with no format wording; heading
+"1.Deployment Strategy:" bold as one unit; Notes formatting tests stay green plus a
+regression for multi-word labels; checklist shown only with Technical details. Browser
+tests for A, C and D. Existing tests stay green; do not weaken any.
+DOCS: CHANGELOG 0.53.0 (add to the entry), user-guide if it describes the fix text.
+VERIFY: ruff, full suite, check.py --browser --audit (report the new rule set id).
+Then stop.
