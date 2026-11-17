@@ -1,40 +1,45 @@
-0.53.0 additions before commit (baseline still NOT updated).
-Constraints unchanged: never read/search/print cr_core/config.py, cr_core/history/config.py
-or .env; no Remedy writes; no crq login; no git; no inline Python — scripts in a file under
-work/, deleted after; do NOT run --update-baseline; never touch work/history/; no answer or
-attestation text in findings, logs or chat; chat shows codes and counts only.
+0.53.0 fixes before commit (baseline still NOT updated). Usual constraints; codes and
+counts only; no answer or attestation text.
 
-A) Evidence link
-   - CV-15 and CV-17 show "Searched: Work detail › Change Assessment" as a link. Click:
-     open Full change details, expand Work detail, expand the latest Change Assessment
-     entry, scroll to it, brief highlight (same style as the Notes highlight).
-   - CV-14: link "Searched: Work detail" opens the Work detail panel.
-   - Internal entry: the link still lands on it ("Internal: text not shown").
+1) Q9 by position: a heading whose text is "Justification" (any case, optional number,
+   optional colon) that appears AFTER the Q8 heading counts as Q9. The first
+   Justification before Q2 stays Q1. Also accept "Justification (if N to #8)" and similar.
+   Tests: "8. Can this be deferred 3 to 5 days? / (Y/N): No / justification: / <text>"
+   -> Q8 = N, Q9 answered, no finding; Justification only at the top and Q8 = N with
+   nothing after -> Q9 missing.
 
-B) How to fix (neutral, no "your"; names the questions itself, never "above"; no mention
-   of template versions or formats):
-   - missing: "Add question 5 (User Restoration ETA) and question 8 (Can this be
-     deferred 3 to 5 days? Y/N) to the Change Assessment Work Detail, and answer each."
-   - unanswered: "Answer question 2 (Deployment Strategy)."  (combine both when needed)
-   - Q8 = N without Q9: "Explain in question 9 why the change cannot be deferred."
-   - CV-14: "Add a Change Assessment Work Detail with questions 1–9."
+2) Wording — no question numbers in findings or fix text (numbers stay only in the
+   Technical-details checklist line, with names in tooltips). Use the CAB wording as
+   short names in config:
+   Q1 "Justification", Q2 "Deployment Strategy", Q3 "Deployment Type", Q4 "Roll Back
+   (Backout) Type and ETA", Q5 "User Restoration ETA", Q6 "Business Impact (worst case
+   scenario)", Q7 "Rollback/Backout Plan Attestation or Validation Sign-Off", Q8 "Can this
+   be deferred 3 to 5 days? (Y/N)", Q9 "Justification on why the change cannot be
+   deferred".
+   - Missing: issue 'Change Assessment incomplete: "User Restoration ETA" and "Can this be
+     deferred 3 to 5 days? (Y/N)" are missing.' fix 'Add "User Restoration ETA" and "Can
+     this be deferred 3 to 5 days? (Y/N)" to the Change Assessment Work Detail, and answer
+     each.'
+   - Unanswered: issue 'Change Assessment: "Deployment Strategy" has no answer.' fix
+     'Answer "Deployment Strategy".'
+   - Q9: fix 'Explain why the change cannot be deferred under "Justification on why the
+     change cannot be deferred".'
+   - Combine missing + unanswered in one finding; 4 or more items -> bullet list.
+   - Verdict headline stays short: "Complete the Change Assessment (2 questions missing,
+     1 unanswered)".
+   - CV-16: 'Answer "Can this be deferred 3 to 5 days? (Y/N)" with Y or N.'
+     CV-17: 'Give a time in minutes or hours for "Roll Back (Backout) Type and ETA".'
+     (or "User Restoration ETA").
+   - CV-14 fix: "Add a Change Assessment Work Detail answering each CES CAB question."
+   - Exec Summary rule: same approach — headline/fix use short names ("What is changing
+     and why", "How production impact is controlled", "Exceptional recovery risk"), body
+     keeps the full question text as today; never "above" or "questions 1, 2 and 3".
 
-C) Bold headings
-   - In Change Assessment entries, render each identified question heading (as written,
-     e.g. "4.Roll Back ETA:") bold on its own line, unbroken; answer text below, normal.
-   - Notes formatter everywhere: a label is the whole phrase from line start (after an
-     optional list number) up to the colon, max 6 words; never split a phrase to bold
-     only the last word. Times like "05:03" and URLs are not labels.
+3) Measure on live (awaiting approval): CV-15 findings naming Q9 before and after fix 1;
+   any other CV-15 that disappears or changes (should be 0).
+4) Rerun the browser tests once; report whether the 4 Pending layout failures persist
+   (do not change those tests).
 
-D) Checklist line (Technical details only): at the top of the latest Change Assessment
-   entry, "1 ✓ 2 ✓ 3 ✓ 4 ✓ 5 ✗ 6 ✓ 7 ✓ 8 ✗ 9 –" (✗ missing, ○ unanswered, – not needed);
-   tooltip names each question. Muted, one line.
-
-TESTS: link opens and highlights the entry (CV-15, CV-17) and opens Work detail (CV-14);
-fix text for missing / unanswered / Q9 / CV-14, with no format wording; heading
-"1.Deployment Strategy:" bold as one unit; Notes formatting tests stay green plus a
-regression for multi-word labels; checklist shown only with Technical details. Browser
-tests for A, C and D. Existing tests stay green; do not weaken any.
-DOCS: CHANGELOG 0.53.0 (add to the entry), user-guide if it describes the fix text.
-VERIFY: ruff, full suite, check.py --browser --audit (report the new rule set id).
-Then stop.
+Tests: update fix/issue text tests for every case above; no digits-as-question-numbers
+in finding text. Verify: ruff, full suite, check.py --browser --audit (report the new
+rule set id). Then stop.
