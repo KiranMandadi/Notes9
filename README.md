@@ -1,27 +1,23 @@
-0.53.2 fix before commit (baseline NOT updated). Quick level.
-GEN-01: the two task clears matched "...install the artifact into PRODUCTION". Show the
-exact token that satisfied the rule on CRQ000002490660 and CRQ000002490822 (rule terms
-only, no other text). The release must be an identifier, not a generic word: a version
-pattern (v1.2, 1.2.3, release 5, R26.11), a build/run number ("build 1534", "#1534"), an
-image tag (name:tag) or an artifact file/package name with a version (e.g. xyz-2.3.0.jar,
-.war, .zip, .tgz, .nupkg). The bare words artifact, build, release, version, package, tag
-do not count. Apply to all sources (Summary, Notes, tasks, assessment).
-Tests: "install the artifact into PRODUCTION" -> not satisfied; "deploy darc-2.3.0.jar"
-and "image svc:1.4.2" -> satisfied. Measure GEN-01 live before -> after (any new findings
-are expected only where no identifier exists; list count). Update sources_review.txt.
-Report rule set id. Then stop.
+0.53.2 addition (baseline NOT updated). Quick level.
+CV-18 message: show the actual restoration time the owner wrote, not the band label.
+Format: 'with restoration of about <parsed time> (<source>: "<answer as written, <=30
+chars>"; <other ETA> not given)' and then the band as the reason: 'over 1 hour of
+customer impact suggests Impact 1 – ...'. Band reasons: "up to 15 minutes", "over 15
+minutes", "over 1 hour", "over 4 hours". When neither ETA has a readable time: "no
+restoration time given (treated as over 4 hours)". Use the longer of the two times and
+name its source. Tests for each case incl. "~ 2 Hour" -> "about 2 hours". Report rule
+set id. Then stop.
+
 
 python scripts/check.py --update-baseline
 python scripts/check.py --browser --audit
 git status
 git add -A
 git status
-git commit -m "0.53.2: retire CV-02/03/08; MF-01, MF-02, GEN-01 also search tasks" -m "- Retired advisories CV-02, CV-03, CV-08 (user feedback; covered by CV-14/15/18)
-- MF-01, MF-02 and GEN-01 also search implementation and scheduler/batch tasks (name and
-  notes) and the Change Assessment deployment answers; rollback, certification,
-  pre/post and cancelled tasks excluded; Pending reads task notes so scores match Review
-- GEN-01 requires a release identifier (version, build number, image tag or versioned
-  artifact); bare words like 'artifact' no longer count
-- 'Searched:' lists every source; cleared findings link to the task
-- Rule set e5db8b35 -> <new id>; baseline, docs, CHANGELOG and tests updated"
+git commit -m "0.53.3: CV-18 message quotes the owner's restoration time" -m "- CV-18 shows the restoration time as written (e.g. 'about 2 hours, Roll Back ETA')
+  and names its source, instead of the band label ('up to 4 hours')
+- The band is given as the reason for the suggested Impact (over 15 min / 1 h / 4 h)
+- No restoration time: 'no restoration time given (treated as over 4 hours)'
+- Wording only: no score or verdict changes
+- Rule set <old id> -> <new id>; baseline, CHANGELOG and tests updated"
 git push
