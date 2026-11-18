@@ -1,23 +1,27 @@
-0.53.2: MF-01, MF-02 and GEN-01 also search tasks and the Change Assessment. Usual
-constraints; no git; do NOT run --update-baseline. Verification: Quick level (ruff + tests
-for the changed modules; browser tests -k review only for the "Searched:" link).
+0.53.2 fix before commit (baseline NOT updated). Quick level.
+GEN-01: the two task clears matched "...install the artifact into PRODUCTION". Show the
+exact token that satisfied the rule on CRQ000002490660 and CRQ000002490822 (rule terms
+only, no other text). The release must be an identifier, not a generic word: a version
+pattern (v1.2, 1.2.3, release 5, R26.11), a build/run number ("build 1534", "#1534"), an
+image tag (name:tag) or an artifact file/package name with a version (e.g. xyz-2.3.0.jar,
+.war, .zip, .tgz, .nupkg). The bare words artifact, build, release, version, package, tag
+do not count. Apply to all sources (Summary, Notes, tasks, assessment).
+Tests: "install the artifact into PRODUCTION" -> not satisfied; "deploy darc-2.3.0.jar"
+and "image svc:1.4.2" -> satisfied. Measure GEN-01 live before -> after (any new findings
+are expected only where no identifier exists; list count). Update sources_review.txt.
+Report rule set id. Then stop.
 
-1) Sources, in addition to Summary and Notes:
-   - task Summary (name) and task Notes of usable tasks: implementation tasks (current
-     name rule) plus tasks whose name contains scheduler, job, batch, spr, control-m,
-     deploy or install; exclude certification/rollback/backout/back out/pre-/post- tasks;
-     same status rules as CC-05 (no Cancelled/Canceled/Bypassed).
-   - Change Assessment answers "Deployment Strategy" and "Deployment Type" (Public entries
-     only; never Q7).
-   History replay: use task text only if history stores it; otherwise unchanged (say which).
-2) Evidence: when matched in a task, the snippet links to that task ("Task 3 · Deploy
-   ..."); when matched in the assessment, link "Work detail › Change Assessment". When not
-   found: "Searched: Summary, Notes, Tasks and Change Assessment – not found".
-3) Tests: LPAR in an implementation task name clears MF-01; Control-M + job names in a
-   scheduler task clear MF-02; "v2.4.1" in a deploy task clears GEN-01; same text only in
-   a rollback or certification task does NOT clear; cancelled task does NOT clear.
-4) Measure (live, awaiting approval + scheduled): MF-01 / MF-02 / GEN-01 before -> after;
-   which source cleared them (task / assessment); verdict changes; 0 new findings.
-   Write work/sources_review.txt with up to 20 cleared cases: change id, rule, source,
-   matched text (<=120 chars). Do not print it.
-CHANGELOG 0.53.2; pyproject 0.53.2. Report rule set id. Then stop.
+python scripts/check.py --update-baseline
+python scripts/check.py --browser --audit
+git status
+git add -A
+git status
+git commit -m "0.53.2: retire CV-02/03/08; MF-01, MF-02, GEN-01 also search tasks" -m "- Retired advisories CV-02, CV-03, CV-08 (user feedback; covered by CV-14/15/18)
+- MF-01, MF-02 and GEN-01 also search implementation and scheduler/batch tasks (name and
+  notes) and the Change Assessment deployment answers; rollback, certification,
+  pre/post and cancelled tasks excluded; Pending reads task notes so scores match Review
+- GEN-01 requires a release identifier (version, build number, image tag or versioned
+  artifact); bare words like 'artifact' no longer count
+- 'Searched:' lists every source; cleared findings link to the task
+- Rule set e5db8b35 -> <new id>; baseline, docs, CHANGELOG and tests updated"
+git push
