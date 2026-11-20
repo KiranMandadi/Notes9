@@ -1,9 +1,13 @@
-git commit -m "0.57.0: change awareness periods shown on the window" -m "- calendar.yaml: awareness list (Critical / High) from the events calendar, separate
-  from freeze periods
-- Pending: tinted 'Critical awareness' / 'High awareness' pill in the Window column with
-  the events in a tooltip; Review At a glance and Calendar show the same
-- Review decisions filter shows text and counts only
-- Freeze pill red with a tooltip naming the restricted period; Critical awareness amber, High awareness violet
-- Local-time tooltip on window times removed (times are shown in ET)
-- Context only: no rule, no score change
-- Rule set 0999d7d3 -> 91237364; baseline, docs, CHANGELOG and tests updated"
+0.57.0 polish: Freeze pill icon.
+Add a small inline SVG lock before the "Freeze" pill text wherever the Freeze pill appears
+(Pending Window column, Review, overlay). Same size, stroke, colour and spacing as the
+awareness triangle: viewBox 24, stroke currentColor, stroke-width 2, round caps/joins,
+fill none:
+  rect x=5 y=11 width=14 height=9 rx=2
+  path M8 11V8a4 4 0 0 1 8 0v3
+Icon and text vertically centred, same pill height as today. "Freeze · exception" stays
+text-only (grey). Tooltip, colours, order and logic unchanged. No other change.
+Extend the existing pill browser test: the Freeze pill contains the lock icon; the
+Freeze · exception pill contains no icon.
+Verification: ruff; browser -k pending and -k review. Ground rules as before; any heredoc,
+python -c or python - is a stop condition.
