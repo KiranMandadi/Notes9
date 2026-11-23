@@ -1,44 +1,54 @@
-Read-only measurement: CV-18 (impact understated): deferral sentences and stated
-justification. Do not change any code, rule, config or baseline.
+0.58.0: CV-18 (impact understated): ignore cost-of-not-deploying sentences, and downgrade
+to an advisory when the Impact level is explicitly justified.
 
-Population: every change CV-18 currently fires on (Major), from live Remedy data via the
-existing review path, same scope as the audit. Also count CV-18 advisories (Scheduled) separately.
+1) Deferral exclusion. When CV-18 reads the Business Impact answer for reach, ignore any
+   sentence describing the cost of NOT deploying: "without deploying", "not deploying",
+   "if not deployed", "if we don't deploy", "if deferred", "deferring", "delay(ing) this",
+   "not implementing", "failure to deploy". Those sentences never count as customer or
+   business-function reach.
 
-For each finding, classify with two candidate checks (prototype them in a new script under
-work/, not in cr_core):
-
-A) Deferral exclusion. A sentence describes the cost of NOT deploying, so it must not count
-   as reach: "without deploying", "not deploying", "if not deployed", "if we don't deploy",
-   "if deferred", "deferring", "delay(ing) this", "not implementing", "failure to deploy",
-   and sentences inside the "cannot be deferred" justification question. Re-run reach
-   detection with those sentences removed. Does reach D still hold?
-
-B) Stated justification. Within the Change Assessment (any question except the attestation
-   question, which is never read or quoted), find a sentence that:
-   1. names the stated Impact level (number 1–4 or its wording, e.g. "Moderate/Limited"), AND
-   2. gives a reason (because / as / since / due to), AND
-   3. the reason describes scope of who is affected: internal, non-customer-facing,
-      no client/customer impact, reports/batch only, a single team, or a count of users
-      ("tens of users", "few users", "<N> users").
-   Also count separately: explicit "non customer facing" / "internal only" / "negligible"
-   statements without the level named.
-   Not a justification: a bare label, or generic reasons (risk is low, tested, rollback
+2) Stated justification. If the Change Assessment (any question except the attestation
+   question, which is never read or quoted; Internal entries never read) has a sentence
+   that names the stated Impact level (its wording, e.g. "Moderate/Limited", "moderate"
+   near "impact", or the number tied to "impact"/"level", not followed by min/hour/day),
+   gives a reason (because / as / since / due to), and the reason describes scope (internal,
+   non-customer-facing, no client/customer impact, reports/batch only, a single team, or a
+   count of users), then CV-18 is an advisory (score 0) instead of Major.
+   Not a justification: a bare label, or generic reasons (low risk, tested, rollback
    available, minimal risk).
-   Contradiction: if a sentence about the change failing (not about deferral) names
-   customers or clients being harmed, B does not apply.
+   Contradiction: if a sentence that is not about deferral passes the CV-18 harm test with
+   customers, clients, investors or account holders named (a business function alone
+   doesn't count), the justification does not apply and the Major stays.
 
-Report codes and counts only:
-- total CV-18 Majors; how many A alone clears (reach D no longer holds); how many B alone
-  would downgrade to advisory; how many A or B; how many stay Major; how many B blocked by
-  a contradiction.
-- the same for the CV-18 advisories.
-- distribution of which deferral phrases and which justification patterns matched.
+3) Messages (neutral wording, no question numbers, no format or version wording):
+   Advisory: "The Impact is stated as <n> – <wording> and explained in the Change
+   Assessment: "<justification, max 160 chars>". The worst case and restoration time would
+   otherwise suggest Impact <m> – <wording>; confirm the explanation holds."
+   "How this was assessed" for the advisory: what was checked (worst case, restoration
+   time, stated Impact), what was found (implied level, the justification sentence), why
+   advisory (the change explains its Impact level), what would make it Major (no
+   explanation, or a sentence showing customer harm from the change).
+   Major wording unchanged.
 
-Write a review list to work/cv18_review.md for me to spot-check: change number, which of
-A/B applied, and the matched sentence (max 200 chars, from the Change Assessment only;
-never the attestation answer, never Internal notes, no submitter names). I will delete it.
-Do not print change numbers or quotes in chat.
+4) Lifecycle and scope unchanged (scored while awaiting approval, advisory once
+   Scheduled; Standard, Latent and Emergency out of scope).
 
-Do not read cr_core/config.py, cr_core/history/config.py or .env. Never delete anything
-under work/history/. No git operations. Any heredoc, python -c or python - is a stop
-condition. Then stop and report.
+5) Tests with made-up fixture text (no live data): each deferral phrase excluded; a
+   deferral-only "clients" sentence no longer gives reach; justification with level word,
+   with number, with "3 – Moderate"; justification missing a reason, missing scope, generic
+   reason → stays Major; contradiction sentence keeps Major; "3 hours" not read as Impact 3;
+   attestation text never read; Scheduled stays advisory.
+6) Docs (rules catalogue, user guide impact section), CHANGELOG 0.58.0, pyproject 0.58.0.
+
+Verification: ruff; tests for the changed modules; browser -k review. Report the old -> new
+rule set ID and, on live data, the CV-18 counts before/after (codes and counts only).
+Do not run --update-baseline or the audit. Do not read cr_core/config.py,
+cr_core/history/config.py or .env. Never delete anything under work/history/. No git.
+Any heredoc, python -c or python - is a stop condition.
+
+
+git commit -m "0.58.0: CV-18 reads cost-of-not-deploying and stated Impact justification" -m "- CV-18 ignores sentences about the cost of not deploying when judging customer reach
+- An explicit Impact justification (level, reason, scope) turns CV-18 into an advisory;
+  a sentence showing customer harm from the change keeps it Major
+- Advisory message and How this was assessed explain the downgrade
+- Rule set <old> -> <new>; baseline, docs, CHANGELOG and tests updated"
