@@ -1,9 +1,12 @@
-1) Class scope only, as measured. The Restriction Exception is added by Remedy for any change
-   set In scope of Restriction = Yes, so it is not limited to the Change Assessment's
-   organisations.
-2) In the Restriction Exception, "N/A" (and NA, Not applicable) counts as an answer. Blank,
-   TBD, dashes and [todo] still count as unanswered. One exception: when "fixing or preventing
-   a production problem" is Yes, the Incident/Problem ticket number must be a real value
-   (N/A there counts as missing). Change Assessment placeholder handling is unchanged.
-3) Yes, next free CC number in the change-class pack (never reuse a retired ID).
-Go ahead with STEP 1.
+OK, that stop was right; continue STEP 1 from where you left off. Reminder: no heredocs,
+python -c, python - or stdin redirects into python; use script files under work/ if needed,
+and delete them afterwards.
+
+Your three decisions are fine, except CC-09: before finishing, tell me in one line what
+CC-09 checks and when it would show next to CC-05. It must not report a restricted period
+based on task times. If its only job is to say "tasks run outside the restricted period",
+retire it (status: retired, like CV-02/03/08) instead of keeping it.
+
+Then finish the "Not done" list, run the verification, and report: files changed, rule set
+old -> new, the live after-comparison against work/cc05_before.json (codes and counts only).
+Delete work/cc05_before.json, work/cc05_snapshot.py and work/cc05_new_review.md at the end.
