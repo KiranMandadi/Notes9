@@ -1,16 +1,25 @@
-One correction to 0.60.0: Restriction Approval Notes must stay an accepted exception type for
-the window check (CC-10/CC-11/CC-12), as before; only the freeze check (CC-05/CC-13) stops
-accepting it. Restore it in calendar.yaml's window-check exception types, CC-10's How to meet
-it, docs/configuration.md and the tests. Report the live CC-10/CC-12 counts before/after this
-correction (codes and counts only). Same rules; no git, no baseline.
+Read-only research on CC-10/CC-12 "no usable implementation task". No code, rule, config or
+baseline changes. No git.
 
-git add -A
-git status
-git commit -m "0.60.0: freeze is a warning; Restriction Exception must be complete" -m "- CC-05: restricted period is an advisory (no points), decided by the change window only;
-  message states the In scope of Restriction value
-- CC-13 (new, Major): In scope of Restriction = Yes needs a complete Restriction Exception;
-  N/A accepted, ticket number required when fixing a production problem; answers never quoted
-- CC-09 retired; Restriction Approval Notes no longer count
-- Pending pill and tooltip: Freeze / Freeze · exception / Freeze · not in scope / scope not set
-- Rule set 45dd2aa5 -> a9fc5042; baseline, docs, CHANGELOG and tests updated"
-git push
+Policy (confirmed): validation and certification tasks are never implementation tasks for the
+window check and may run in any window. A task whose name contains both "Implementation" and
+"Validation"/"Certification" is a validation/certification task.
+
+1) Explain what makes an implementation task "usable" today: accepted statuses, how
+   implementation vs validation/certification is decided (name, type, field, and which wins
+   when both words appear), any duration cap or other guard. Quote config keys/values, not code.
+2) On live data (same scope as the audit), codes and counts only:
+   - changes where CC-12 fires with "no usable implementation task";
+   - of those, how many have an open implementation task (per the policy above) with both
+     scheduled start and end; for each such task the rejection reason (status value,
+     duration cap, other);
+   - counts of status values on open implementation tasks (Staged, Assigned, Pending,
+     Scheduled, Work in Progress, ...);
+   - how many tasks are currently classed as implementation but are validation/certification
+     by the policy above (and the reverse);
+   - if fixed per policy: how many CC-12 would pass, become CC-10 (Major), or stay CC-12.
+3) Write work/cc12_review.md: change number, task step, status, scheduled start/end, class
+   today vs class by policy, rejection reason. No names. I will delete it.
+Do not read cr_core/config.py, cr_core/history/config.py or .env. Never delete anything under
+work/history/. No heredocs (not even empty ones), python -c, python - or stdin redirects.
+Then stop and report.
