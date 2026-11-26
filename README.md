@@ -1,25 +1,28 @@
-Read-only research on CC-10/CC-12 "no usable implementation task". No code, rule, config or
-baseline changes. No git.
+0.60.1: window check regression and wording. Approved from your research.
 
-Policy (confirmed): validation and certification tasks are never implementation tasks for the
-window check and may run in any window. A task whose name contains both "Implementation" and
-"Validation"/"Certification" is a validation/certification task.
+1) Window check (CC-10/11/12): remove the skip of implementation tasks that fall inside a
+   restricted period. Since 0.60.0 CC-05 reads only the change window, so every implementation
+   task is checked against its allowed hours regardless of restricted periods.
+2) calendar.yaml window_check task_exclude: add "validation", so a task whose name contains
+   validation or certification is never an implementation task (exclude wins over include).
+   Validation and certification tasks may run in any window and are not checked.
+3) Wording:
+   - CC-05 advisory: label "Check" instead of "Fix". In Scope = No: "'In scope of
+     Restriction' is No. If the change is in scope, set it to Yes and complete the Restriction
+     Exception Work Detail." Blank: "'In scope of Restriction' is not set. Set it, and if Yes
+     complete the Restriction Exception Work Detail." Yes and complete: no fix line.
+   - CC-12 fix text names all accepted window exception types (Windows Exception, Restriction
+     Exception, Restriction Approval Notes), matching CC-10's How to meet it.
+   - At a glance Freeze value "Marked not in scope of restriction" / "Scope not set" in
+     neutral text colour (not orange).
+4) Tests (made-up fixtures): implementation task inside a restricted period is checked
+   (inside allowed hours -> pass; outside -> CC-10); "Implementation ... Validation" task
+   excluded; validation/certification tasks never produce CC-10/CC-12; wording per case.
+5) CHANGELOG 0.60.1, pyproject 0.60.1; docs where the skip or exclusions are described.
 
-1) Explain what makes an implementation task "usable" today: accepted statuses, how
-   implementation vs validation/certification is decided (name, type, field, and which wins
-   when both words appear), any duration cap or other guard. Quote config keys/values, not code.
-2) On live data (same scope as the audit), codes and counts only:
-   - changes where CC-12 fires with "no usable implementation task";
-   - of those, how many have an open implementation task (per the policy above) with both
-     scheduled start and end; for each such task the rejection reason (status value,
-     duration cap, other);
-   - counts of status values on open implementation tasks (Staged, Assigned, Pending,
-     Scheduled, Work in Progress, ...);
-   - how many tasks are currently classed as implementation but are validation/certification
-     by the policy above (and the reverse);
-   - if fixed per policy: how many CC-12 would pass, become CC-10 (Major), or stay CC-12.
-3) Write work/cc12_review.md: change number, task step, status, scheduled start/end, class
-   today vs class by policy, rejection reason. No names. I will delete it.
+Verification: ruff; tests for changed modules; browser -k review and -k pending. Report rule
+set old -> new and live CC-10/CC-12 counts before/after (codes and counts only); expected
+CC-12 28 -> 10, CC-10 unchanged. Do not run --update-baseline or the audit. No git.
 Do not read cr_core/config.py, cr_core/history/config.py or .env. Never delete anything under
 work/history/. No heredocs (not even empty ones), python -c, python - or stdin redirects.
-Then stop and report.
+Delete work/cc12_review.md at the end.
