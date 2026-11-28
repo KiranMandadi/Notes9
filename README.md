@@ -1,11 +1,16 @@
-At a glance Window row: keep the duration and the "Longer than 8 h" pill together on one
-line (no wrap inside "4 d 3 h 30 min"); if space runs out, wrap the whole duration+pill to
-the next line. Saved reports the same. UI only.
-
-
-git add -A
-git status
-git commit -m "0.63.1: At a glance Window row keeps the duration on one line" -m "- The window duration and its 'Longer than 8 h' pill stay together; the pair wraps as one
-  when space runs out (Console and saved reports)
-- UI only; rule set 41275f9f unchanged"
-git push
+Read-only measurement, Change Assessment template wording. No code, config, rule or
+baseline changes. No git. Live, all pages, Change Assessment scope as today.
+Match rule: a question heading matches the template when, after ignoring numbering (1., 4A.,
+Q4), case, whitespace, punctuation, bold markers and a bracketed "(Y/N)", its words are
+exactly the template's. Anything else is reworded.
+Report codes and counts only:
+- changes with at least one reworded question; distribution by count (1, 2, 3+);
+- per template question: how many changes reworded it, and the 5 most common rewordings
+  (heading text only);
+- changes with questions missing entirely (not just reworded);
+- impact if reworded = unanswered (option A): CV-15 counts and verdicts before -> after;
+- impact if one Minor per change (option B): score and verdict changes.
+Write work/ca_wording_review.md (change number, template question, heading as written).
+Never the attestation answer, no names. I will delete it. Usual rules: no heredocs,
+python -c, python - or stdin; do not read the config files or .env; never delete anything
+under work/history/. Stop and report.
