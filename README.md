@@ -1,12 +1,28 @@
-git add -A
-git status
-git commit -m "0.61.0: CV-18 is advisory and follows the Remedy Impact definition" -m "- CV-18 never scores: Impact is defined by users/customers affected; restoration time only
-  indicates it
-- A stated user count with harm or unavailability (users, customers, clients, employees...)
-  is compared with the definition first: 1000s -> 1, 100s or a workgroup -> 2, 10s -> 3, <10 -> 4
-- Time bands: up to 15 min -> 4 (no finding), up to 1 h -> 3, up to 2 h -> 2, over 2 h -> 1
-  (User Restoration ETA, else Roll Back ETA); no readable time -> no suggestion
-- An explained Impact gives no finding; message notes when Impact is still the Remedy default 4
-- Fix: At a glance lock icon no longer writes the SVG namespace URL (0.60.2 slip)
-- Rule set 84e11bfa -> 14e9b07d; baseline, docs, CHANGELOG and tests updated"
-git push
+0.61.1: read every page of the Remedy search.
+
+Today every list read from Remedy stops at the first page (200 changes). Make ChangeLens keep
+asking for the next page until Remedy has no more results.
+
+1) Find every place that reads a list of changes from Remedy (at least: the Pending list in
+   all filters and views, the overlap check in the Console, the overlap check in
+   check.py --audit). Report the list before changing anything.
+2) For each, page through the Remedy search until all matching changes are read. Requests one
+   after another (not in parallel), same page size as today. Add a safety cap of 5,000
+   changes; if it is ever reached, stop and show a clear message ("More than 5,000 changes
+   match; narrow the filters").
+3) Remove the "more changes than shown" note when all pages were read; keep it only when the
+   safety cap is hit.
+4) No change to rules, scoring, caching or what is shown for each change. Shared mode still
+   reads live Remedy data for every request (no cache).
+5) Tests: a fake Remedy returning 450 results across 3 pages -> Pending shows 450 and the
+   overlap check sees all 450; exactly 200 results -> a single extra empty-page check, no
+   error; the safety-cap message.
+6) Docs where the 200 limit is mentioned; CHANGELOG 0.61.1; pyproject 0.61.1.
+
+Verification: ruff; tests for changed modules plus test_security; browser -k pending.
+Report: the places changed, the live count for Status = Scheduled For Approval + Scheduled
+(expected about 303, all shown), how long the Pending list takes to load now vs before, and
+whether the rule set ID changed (it should not).
+No git, no baseline, no audit. Do not read cr_core/config.py, cr_core/history/config.py or
+.env. Never delete anything under work/history/. No heredocs (not even empty ones),
+python -c, python - or stdin redirects.
